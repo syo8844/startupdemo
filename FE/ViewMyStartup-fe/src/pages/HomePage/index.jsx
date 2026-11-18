@@ -5,7 +5,7 @@ import Dropdown from "../../components/Dropdown";
 import "../../components/Dropdown/Dropdown.css";
 import SearchBar from "../../components/SearchBar";
 import "./HomePage.css";
-import { useNavigate } from "react-router-dom";
+import CompanyInfoModal from "@/components/modals/CompanyInfoModal";
 
 const fmt = (v) => new Intl.NumberFormat("ko-KR").format(Number(v ?? 0));
 
@@ -49,8 +49,7 @@ export default function HomePage() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
-  const navigate = useNavigate();
+  const [selectedCompanyId, setSelectedCompanyId] = useState(null);
 
   const doGetCorpList = async (pageArg, pageSizeArg, sortArg, keywordArg) => {
     try {
@@ -271,9 +270,18 @@ export default function HomePage() {
                       <li
                         key={row.id ?? row.corp_id ?? i}
                         className="list-row grid-cols row-click"
+                        role="button"
+                        tabIndex={0}
                         onClick={() => {
                           const id = row?.id ?? row?.corp_id;
-                          if (id) navigate(`/company/${id}`);
+                          if (id) setSelectedCompanyId(String(id));
+                        }}
+                        onKeyDown={(event) => {
+                          if (event.key === "Enter" || event.key === " ") {
+                            event.preventDefault();
+                            const id = row?.id ?? row?.corp_id;
+                            if (id) setSelectedCompanyId(String(id));
+                          }
                         }}
                       >
                         <div className="cell center cell--rank">
@@ -336,6 +344,11 @@ export default function HomePage() {
           />
         )}
       </div>
+      <CompanyInfoModal
+        isOpen={Boolean(selectedCompanyId)}
+        companyId={selectedCompanyId}
+        onClose={() => setSelectedCompanyId(null)}
+      />
     </div>
   );
 }

@@ -1,0 +1,160 @@
+.company-info-modal {
+  width: min(920px, 82vw);
+  max-height: calc(100vh - 144px);
+  overflow-y: auto;
+  color: #fff;
+}
+
+.company-info-modal__header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 8px 0 24px;
+  border-bottom: 1px solid #383838;
+}
+
+.company-info-modal__logo {
+  width: 72px;
+  height: 72px;
+  flex: 0 0 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #282828;
+}
+
+.company-info-modal__name {
+  margin: 0 0 8px;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.company-info-modal__category {
+  color: #a0a0a0;
+  font-size: 16px;
+}
+
+.company-info-modal__metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.company-info-modal__metric {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 76px;
+  padding: 16px;
+  border-radius: 10px;
+  background: #282828;
+  color: #d8d8d8;
+  font-size: 14px;
+}
+
+.company-info-modal__metric strong {
+  color: #fff;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.company-info-modal__about {
+  margin-top: 24px;
+  padding: 20px;
+  border-radius: 10px;
+  background: #282828;
+}
+
+.company-info-modal__about h3,
+.company-info-modal__investments-title h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.company-info-modal__about p {
+  margin: 12px 0 0;
+  color: #d8d8d8;
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+.company-info-modal__investments {
+  margin-top: 24px;
+}
+
+.company-info-modal__investments-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.company-info-modal__investments-title strong {
+  font-size: 14px;
+}
+
+.company-info-modal__investments ul {
+  display: grid;
+  gap: 1px;
+  max-height: 220px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-radius: 6px;
+  background: #383838;
+}
+
+.company-info-modal__investments li {
+  display: grid;
+  grid-template-columns: minmax(80px, 1fr) minmax(90px, 120px) minmax(120px, 2fr);
+  gap: 12px;
+  padding: 14px 16px;
+  background: #242424;
+  color: #d8d8d8;
+  font-size: 14px;
+}
+
+.company-info-modal__investments li span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.company-info-modal__state,
+.company-info-modal__error {
+  margin: 16px 0;
+  color: #d8d8d8;
+  font-size: 14px;
+}
+
+.company-info-modal__error {
+  color: #ff7777;
+}
+
+@media (max-width: 640px) {
+  .company-info-modal {
+    width: min(520px, 78vw);
+  }
+
+  .company-info-modal__metrics {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .company-info-modal__metric {
+    min-height: 56px;
+  }
+
+  .company-info-modal__investments li {
+    grid-template-columns: 1fr auto;
+  }
+
+  .company-info-modal__investments li span:last-child {
+    grid-column: 1 / -1;
+    white-space: normal;
+  }
+}
