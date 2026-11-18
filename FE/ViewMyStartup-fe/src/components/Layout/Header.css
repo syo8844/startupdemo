@@ -1,0 +1,99 @@
+html, body { margin: 0; }
+
+/* 기본: PC */
+.globalHeader {
+  position: fixed;
+  width: 100%;
+  height: 60px;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--black-black_100, #2E2E2E);
+  background: var(--black-black_400, #131313);
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+.globalHeader .inner {
+  max-width: 1200px;
+  height: 60px;
+  margin: 0 auto;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+}
+
+/* 왼쪽 그룹(로고 + 내비 + 로그인) */
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  width: 100%;            /* ← 가로 꽉 채워서 로그인 오른쪽 정렬 가능 */
+}
+
+.headerLogo img {
+  width: 112px;
+  height: auto;
+  display: flex;
+}
+
+/* 모바일 로고 크기 */
+@media (max-width: 768px) {
+  .globalHeader { height: 60px; }
+  .globalHeader .inner { height: 60px; }
+  .headerLogo img { width: 64px; }
+}
+@media (max-width: 480px) {
+  .globalHeader { height: 56px; }
+  .globalHeader .inner { height: 56px; }
+}
+
+/* 내비게이션 */
+.globalHeader nav ul {
+  display: flex;
+  gap: 34px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* 기본 회색 */
+.nav-link {
+  color: var(--gray-gray_200, #747474);
+  text-align: center;
+  font-family: Pretendard, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+/* 활성 흰색 */
+.nav-link.active,
+.nav-link[aria-current="page"] {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+/* 로그인 */
+.loginLink {
+  margin-left: auto;   /* 오른쪽 정렬 */
+}
+
+/* 접근성: 포커스 표시 */
+.nav-link:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+/* 로그아웃 버튼을 링크처럼 보이게 */
+.asButton {
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  /* .nav-link 스타일을 그대로 상속받게 클래스만 달아둔 상태 */
+}

@@ -1,0 +1,18 @@
+{
+  "folders": [
+    {
+      "name": "Frontend (Netlify)",
+      "path": "FE/ViewMyStartup-fe"
+    },
+    {
+      "name": "Backend (Render)",
+      "path": "BE/ViewMyStartup-be"
+    }
+  ],
+  "settings": {
+    "files.exclude": {
+      "**/node_modules": true,
+      "**/dist": true
+    }
+  }
+}

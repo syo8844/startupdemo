@@ -1,0 +1,518 @@
+/* 컨테이너 & 변수 */
+.cmp-select-page {
+  width: 100%;
+}
+
+/* ================================
+            페이지별 변수
+   ================================ */
+.cmp-select-page {
+  --w-rank: 68px;
+  --w-name: 213px;
+  --w-intro: 304px;
+  --w-category: 153.75px;
+  --w-my: 231px;
+  --w-compare: 231px;
+  --table-width: calc(var(--w-rank) + var(--w-name) + var(--w-intro) + var(--w-category) + var(--w-my) + var(--w-compare));
+}
+
+@media (max-width: 1024.98px) {
+  .cmp-select-page {
+    --w-rank: 60px;
+    --w-name: 140px;
+    --w-intro: 180px;
+    --w-category: 84px;
+    --w-my: 116px;
+    --w-compare: 116px;
+    --table-width: calc(var(--w-rank) + var(--w-name) + var(--w-intro) + var(--w-category) + var(--w-my) + var(--w-compare));
+  }
+}
+
+/* ================================
+       그리드가 변수를 읽는 규칙
+   ================================ */
+
+.cmp-select-page .grid-cols {
+  display: grid;
+  grid-template-columns:
+    var(--w-rank, 68px)
+    var(--w-name, 213px)
+    var(--w-intro, 304px)
+    var(--w-category, 153.75px)
+    var(--w-my, 231px)
+    var(--w-compare, 231px);
+  width: var(--table-width, 1200px);
+  gap: 0;
+  box-sizing: border-box;
+}
+
+.cmp-select-page .table-inner {
+  min-width: var(--table-width, 1200px);
+}
+
+/* 페이지 래퍼*/
+.page-inner {
+  max-width: 1220px;
+  margin: 0 auto;
+  padding: 0 16px 133px; /*하단 여백*/
+}
+
+@media (min-width: 768px) {
+  .page-inner {
+    padding: 0 0 133px;
+  }
+}
+
+/* 기업명 컬럼: 좌측 여백 24px */
+.cmp-select-page .grid-cols .td.company {
+  padding-left: 24px;
+}
+
+/* 헤더 '기업명'도 본문과 정렬 맞춤 */
+.cmp-select-page .grid-cols .th:nth-child(2) {
+  padding-left: 24px;
+  text-align: left;
+}
+
+/* 로고와 텍스트 간 간격 */
+.cmp-select-page .company-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+
+/* 타이틀 */
+.title-wrap {
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .title-wrap {
+    width: var(--table-width);
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .title-wrap {
+    margin-top: 22px;
+  }
+}
+
+.title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.title {
+  color: #fff;
+  font-family: Pretendard, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: normal;
+}
+
+@media (min-width: 768px) {
+  .title {
+    font-size: 20px;
+  }
+}
+
+/* 외부 드롭다운 슬롯 */
+.dropdown-slot {
+  width: 320px;
+  height: 40px;
+}
+
+/* 스크롤 & 폭 */
+.table-scroll {
+  overflow-x: visible;
+  position: relative;
+}
+
+.table-inner {
+  width: var(--table-width);
+  margin: 0 auto;
+}
+
+@media (max-width: 767.98px) {
+  .table-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .table-scroll::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* 그리드 */
+.grid-cols {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: var(--w-rank) var(--w-name) var(--w-intro) var(--w-category) var(--w-my) var(--w-compare);
+  box-sizing: border-box;
+}
+
+/* 분리 박스 */
+.table-head,
+.table-body {
+  border-radius: 4px;
+  background: var(--black-black_100, #2E2E2E);
+  border: none;
+  outline: none;
+  box-shadow: none;
+  overflow: hidden;
+}
+
+/* 헤더 */
+.th {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 39px;
+  box-sizing: border-box;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  font-family: Pretendard, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-weight: 500;
+  line-height: 1.2;
+  font-size: 13px; /* 모바일 13px */
+}
+
+@media (min-width: 768px) {
+  .th {
+    font-size: 14px; /* PC/태블릿 14px */
+  }
+}
+
+/* 긴 헤더 텍스트 2줄(태블릿/모바일) */
+.br-md {
+  display: none;
+}
+
+@media (max-width: 1024.98px) {
+  .br-md {
+    display: block !important;
+    height: 0;
+    line-height: 0;
+    margin: 0;
+    padding: 0;
+  }
+  .th-wrap {
+    white-space: normal;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    line-height: 1;
+    gap: 2px; /* 줄 간격 */
+  }
+}
+
+/* 헤더/바디 사이 16px */
+.head-body-gap {
+  height: 16px;
+}
+
+/* 바디(행 64px 고정) */
+.tr {
+  height: 64px;
+  box-sizing: border-box;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.tr:last-child {
+  border-bottom: 0;
+}
+
+.td {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+  font-size: 13px; /* 모바일 13px */
+}
+
+@media (min-width: 768px) {
+  .td {
+    font-size: 14px; /* PC/태블릿 14px */
+  }
+}
+
+.td.center {
+  justify-content: center;
+  text-align: center;
+}
+
+.td.left {
+  justify-content: flex-start;
+  text-align: left;
+  padding: 0 12px;
+}
+
+.td.right {
+  justify-content: flex-end;
+  text-align: right;
+  padding: 0 12px;
+}
+
+.td.body {
+  color: #d8d8d8;
+  text-align: center;
+  font-family: Pretendard, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.td.company {
+  color: #fff;
+  font-family: Pretendard, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-weight: 500;
+  line-height: normal;
+}
+
+/* 기업명 셀 내부 */
+.company-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.logo {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex: 0 0 auto;
+}
+
+.company-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 기업 소개  */
+.intro-text {
+  display: -webkit-box;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  white-space: normal;
+}
+
+/* 모바일 커스텀 스크롤바 */
+.mobile-scrollbar {
+  display: none;
+}
+
+@media (max-width: 767.98px) {
+  .mobile-scrollbar {
+    display: block;
+    width: 100%;
+    margin: 8px 0 0;
+  }
+  .mobile-scrollbar.hidden {
+    display: none;
+  }
+  .mobile-scrollbar__track {
+    width: 348px;
+    height: 12px;
+    margin: 0 auto;
+    border-radius: 8px;
+    background: #212121;
+    position: relative;
+    touch-action: none;
+    overflow: hidden;
+    padding-left: 2px;
+    box-sizing: border-box;
+  }
+  .mobile-scrollbar__thumb {
+    width: 101px;
+    height: 8px;
+    border-radius: 8px;
+    background: #131313;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    will-change: transform;
+  }
+}
+
+.pagination-wrapper {
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+}
+
+.cmp-select-page .table-scroll {
+  position: relative;
+  z-index: 1;
+}
+
+.cmp-select-page .title-wrap {
+  position: relative;
+  z-index: 10;
+  overflow: visible;
+}
+
+.cmp-select-page .order-dropdown {
+  position: relative;
+  z-index: 20;
+}
+
+.cmp-select-page .order-dropdown .dropdown {
+  position: relative;
+  z-index: 30;
+}
+
+.cmp-select-page .order-dropdown .dropdown-list {
+  position: absolute;
+  z-index: 9999;
+  top: 100%;
+  right: 0;
+}
+
+
+.cmp-select-page .td.company,
+.cmp-select-page .td.company .company-name {
+  font-size: 13px;      /* mobile */
+  font-weight: 500;
+  color: #fff;
+}
+
+@media (min-width: 768px) {
+  .cmp-select-page .td.company,
+  .cmp-select-page .td.company .company-name {
+    font-size: 14px;
+  }
+}
+
+.table-body .tr.row-click {
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.table-body .tr.row-click:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+.table-body .tr.row-click:active {
+  background-color: rgba(255, 255, 255, 0.09);
+}
+
+.company-name { text-decoration: none; }
+
+
+@media (max-width: 1024.98px) {
+  .cmp-select-page .table-body .tr .td.company.left {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+ 
+  .cmp-select-page .table-head .grid-cols .th:nth-child(2) {
+    padding-left: 0 !important;
+    text-align: left !important;
+  }
+
+
+  .cmp-select-page .table-body .tr .td.company .company-cell {
+    gap: 0 !important;
+    justify-content: flex-start !important;
+  }
+  .cmp-select-page .table-body .tr .td.company .company-cell .logo {
+    margin: 0 !important;
+  }
+
+  .cmp-select-page .table-body .tr .td.company,
+  .cmp-select-page .table-body .tr .td.company .company-cell,
+  .cmp-select-page .table-body .tr .td.company .company-cell .company-name {
+    max-width: none !important;
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: initial !important;
+    word-break: keep-all;
+    overflow-wrap: anywhere;
+    line-height: 1.35;
+  }
+
+  .cmp-select-page .table-body .tr {
+    min-height: 64px;
+    align-items: stretch;
+  }
+  .cmp-select-page .table-body .tr .td.company {
+    align-items: center;
+  }
+}
+
+
+@media (min-width: 768px) and (max-width: 1024.98px) {
+
+  .cmp-select-page .table-body .tr .td.company.left {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .cmp-select-page .table-head .grid-cols .th:nth-child(2) {
+    padding-left: 0 !important;
+    text-align: left !important;
+  }
+
+
+  .cmp-select-page .table-body .tr .td.company .company-cell {
+    gap: 0 !important;
+    justify-content: flex-start !important;
+  }
+  .cmp-select-page .table-body .tr .td.company .company-cell .logo {
+    margin: 0 !important;
+  }
+
+
+  .cmp-select-page .table-body .tr .td.company {
+    white-space: normal !important;
+    align-items: center;
+    min-height: 64px;
+  }
+  .cmp-select-page .table-body .tr .td.company .company-cell .company-name {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    white-space: normal !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.35;
+    max-width: none !important;
+  }
+}
+
+
+@media (max-width: 767.98px) {
+  .cmp-select-page .table-body .tr .td.company {
+    white-space: nowrap !important;
+    align-items: center;
+    min-height: 64px;
+  }
+  .cmp-select-page .table-body .tr .td.company .company-cell .company-name {
+    display: inline;
+    -webkit-line-clamp: initial;
+    -webkit-box-orient: initial;
+    white-space: nowrap !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2;
+    max-width: 100%;
+  }
+}
+
