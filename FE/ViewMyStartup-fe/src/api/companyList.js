@@ -126,15 +126,17 @@ export async function getCorpList(opt = {}) {
   const offset = Math.max(0, (page - 1) * pageSize);
   const order = ORDER_MAP[sort] || "createdDesc";
 
+  const params = new URLSearchParams({
+    offset: String(offset),
+    limit: String(pageSize),
+    order,
+    search: keyword.trim(),
+  });
+  const url = `${API_BASE}/corp?${params.toString()}`;
 
-  const url = `${API_BASE}/corp?offset=${offset}&limit=${pageSize}&order=${order}&keyword=${keyword}`;
-
-  const res = await instance.get(url)
-  .then(res => {
-    console.log(res);
-    return res.data;
-  }).catch(e => {
-    throw new Error(e.response.data.message);
+  const res = await instance.get(url).then((response) => response.data).catch((e) => {
+    const message = e.response?.data?.message || e.message || "기업 목록을 불러오지 못했습니다.";
+    throw new Error(message);
   });
 
 
