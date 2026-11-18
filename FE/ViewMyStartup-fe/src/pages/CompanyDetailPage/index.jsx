@@ -10,7 +10,7 @@ import InvestmentModal from '@/components/modals/InvestmentModal';
 function formatEokWon(n) {
   if (typeof n !== 'number' || Number.isNaN(n)) return '-';
   const eok = n / 100_000_000;
-  const val = eok >= 10 ? Math.round(eok) : Math.round(eok * 10) / 10;
+  const val = Number(eok.toFixed(1));
   return `${val.toLocaleString('ko-KR')}억 원`;
 }
 function formatEok(n) {

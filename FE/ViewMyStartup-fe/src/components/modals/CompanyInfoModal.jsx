@@ -7,7 +7,7 @@ const formatEokWon = (value) => {
   const amount = Number(value);
   if (!Number.isFinite(amount)) return "-";
   const eok = amount / 100_000_000;
-  const formatted = eok >= 10 ? Math.round(eok) : Math.round(eok * 10) / 10;
+  const formatted = Number(eok.toFixed(1));
   return `${formatted.toLocaleString("ko-KR")}억 원`;
 };
 
