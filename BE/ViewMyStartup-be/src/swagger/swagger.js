@@ -11,8 +11,8 @@ const options = {
     },
     servers: [
       {
-        url: "https://eight-viewmystartup-4-be.onrender.com",
-        description: "Local",
+        url: "https://startupdemo.onrender.com",
+        description: "Render production",
       },
     ],
     components: {
