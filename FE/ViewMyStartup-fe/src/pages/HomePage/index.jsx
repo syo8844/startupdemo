@@ -8,6 +8,12 @@ import SearchBar from "../../components/SearchBar";
 import "./HomePage.css";
 
 const fmt = (v) => new Intl.NumberFormat("ko-KR").format(Number(v ?? 0));
+const formatEokWon = (value) => {
+  const amount = Number(value);
+  if (!Number.isFinite(amount)) return "-";
+  const eok = Number((amount / 100_000_000).toFixed(1));
+  return `${eok.toLocaleString("ko-KR")}억 원`;
+};
 
 const SORT_OPTIONS = [
   { value: "revenueDesc", label: "매출액 높은순" },
@@ -309,8 +315,8 @@ export default function HomePage() {
                         </div>
 
                         <div className="cell center">{row.corp_tag}</div>
-                        <div className="cell center">{fmt(row.total_investment)}</div>
-                        <div className="cell center">{fmt(row.corp_sales)}</div>
+                        <div className="cell center">{formatEokWon(row.total_investment)}</div>
+                        <div className="cell center">{formatEokWon(row.corp_sales)}</div>
                         <div className="cell center">{fmt(row.employee)}</div>
                       </li>
                     ))}
