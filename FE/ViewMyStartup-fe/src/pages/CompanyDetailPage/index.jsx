@@ -129,10 +129,10 @@ export default function CompanyDetailPage() {
 
               <div className="title-wrap">
                 <h1 id="companyTitle" className="company-name">
-                  {company?.corp_name || (loading ? '불러오는 중...' : '기업명')}
+                  {company?.corp_name?.trim() || (loading ? '불러오는 중...' : '기업명')}
                 </h1>
                 {company?.corp_tag && (
-                  <span className="category-pill">{company.corp_tag}</span>
+                  <span className="category-pill">{company.corp_tag.trim()}</span>
                 )}
               </div>
             </div>
