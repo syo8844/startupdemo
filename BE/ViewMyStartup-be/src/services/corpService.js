@@ -139,11 +139,13 @@ export async function getCorp(id) {
   });
 
   const investments = await prisma.investment.findMany({
-    where: { corpId: id },
+    where: { corpId: id, isDeleted: false },
     orderBy: { amount: "desc" },
     select: {
       id: true,
       amount: true,
+      name: true,
+      amount_comment: true,
       user: {
         select: {
           id: true,

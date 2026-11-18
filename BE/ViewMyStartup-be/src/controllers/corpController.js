@@ -7,8 +7,9 @@ export async function listCorpController(req, res, next) {
     offset = 0,
     limit = 10,
     order = "investmentHighest",
-    search,
   } = req.query;
+  // The deployed frontend still sends `keyword`; newer frontend builds use `search`.
+  const search = req.query.search ?? req.query.keyword;
   const data = { offset, limit, order, search };
   const corps = await listCorp(data);
   res.send(corps);

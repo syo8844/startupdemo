@@ -11,11 +11,6 @@ const formatEokWon = (value) => {
   return `${formatted.toLocaleString("ko-KR")}억 원`;
 };
 
-const formatWon = (value) => {
-  const amount = Number(value);
-  return Number.isFinite(amount) ? `${amount.toLocaleString("ko-KR")}원` : "-";
-};
-
 function CompanyInfoModal({ isOpen, companyId, onClose }) {
   const [company, setCompany] = useState(null);
   const [investments, setInvestments] = useState([]);
@@ -106,7 +101,7 @@ function CompanyInfoModal({ isOpen, companyId, onClose }) {
                   {investments.slice(0, 5).map((investment) => (
                     <li key={investment.id}>
                       <span>{investment.investor}</span>
-                      <span>{formatWon(investment.amount)}</span>
+                      <span>{formatEokWon(investment.amount)}</span>
                       <span>{investment.comment || "-"}</span>
                     </li>
                   ))}

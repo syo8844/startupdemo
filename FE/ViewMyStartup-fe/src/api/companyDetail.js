@@ -52,9 +52,9 @@ export async function getCompanyDetail({ id }) {
   const investments = investmentsSrc
     .map((it) => ({
       id: it?.id ?? '',
-      investor: it?.user?.name ?? '-',
+      investor: it?.user?.name ?? it?.name ?? '-',
       amount: toNum(it?.amount) ?? 0,
-      comment: it?.comment ?? '',
+      comment: it?.amount_comment ?? it?.comment ?? '',
     }))
     .sort((a, b) => (b.amount || 0) - (a.amount || 0))
     .map((row, idx) => ({ ...row, rank: idx + 1 }));
