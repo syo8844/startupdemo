@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { getCorpList } from "../../api/companyList";
 import Pagination from "../../components/Pagination";
 import Dropdown from "../../components/Dropdown";
 import "../../components/Dropdown/Dropdown.css";
 import SearchBar from "../../components/SearchBar";
 import "./HomePage.css";
-import CompanyInfoModal from "@/components/modals/CompanyInfoModal";
 
 const fmt = (v) => new Intl.NumberFormat("ko-KR").format(Number(v ?? 0));
 
@@ -37,6 +37,7 @@ function IntroWithBreak({ text }) {
 }
 
 export default function HomePage() {
+  const navigate = useNavigate();
   const [keywordInput, setKeywordInput] = useState("");
   const [keyword, setKeyword] = useState("");
 
@@ -49,7 +50,6 @@ export default function HomePage() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [selectedCompanyId, setSelectedCompanyId] = useState(null);
 
   const doGetCorpList = async (pageArg, pageSizeArg, sortArg, keywordArg) => {
     try {
@@ -274,13 +274,13 @@ export default function HomePage() {
                         tabIndex={0}
                         onClick={() => {
                           const id = row?.id ?? row?.corp_id;
-                          if (id) setSelectedCompanyId(String(id));
+                          if (id) navigate(`/company/${encodeURIComponent(id)}`);
                         }}
                         onKeyDown={(event) => {
                           if (event.key === "Enter" || event.key === " ") {
                             event.preventDefault();
                             const id = row?.id ?? row?.corp_id;
-                            if (id) setSelectedCompanyId(String(id));
+                            if (id) navigate(`/company/${encodeURIComponent(id)}`);
                           }
                         }}
                       >
@@ -344,11 +344,6 @@ export default function HomePage() {
           />
         )}
       </div>
-      <CompanyInfoModal
-        isOpen={Boolean(selectedCompanyId)}
-        companyId={selectedCompanyId}
-        onClose={() => setSelectedCompanyId(null)}
-      />
     </div>
   );
 }
