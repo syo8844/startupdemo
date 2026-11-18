@@ -9,14 +9,12 @@ import InvestmentModal from '@/components/modals/InvestmentModal';
 
 function formatEokWon(n) {
   if (typeof n !== 'number' || Number.isNaN(n)) return '-';
-  const eok = n / 100_000_000;
-  const val = Number(eok.toFixed(1));
+  const val = Math.round(n / 100_000_000);
   return `${val.toLocaleString('ko-KR')}억 원`;
 }
 function formatEok(n) {
   if (typeof n !== 'number' || Number.isNaN(n)) return '-';
-  const eok = n / 100_000_000;
-  const value = eok < 1 ? Math.round(eok * 10) / 10 : Math.round(eok);
+  const value = Math.round(n / 100_000_000);
   return `${value.toLocaleString('ko-KR')}억`;
 }
 export default function CompanyDetailPage() {
