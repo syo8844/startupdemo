@@ -168,7 +168,7 @@
 .invest-head,
 .invest-row {
   display: grid;
-  grid-template-columns: 100px 100px 100px 1fr;
+  grid-template-columns: 100px 32px 104px minmax(0, 1fr);
 }
 
 .invest-head {
@@ -217,13 +217,13 @@
 
 .invest-head .c1,
 .invest-row .c1 {
-  padding-left: 16px;
+  padding-left: 8px;
   text-align: left;
 }
 
 .invest-head .c2,
 .invest-row .c2 {
-  padding: 0 8px;
+  padding: 0;
   text-align: center;
 }
 
@@ -234,9 +234,14 @@
   font-variant-numeric: tabular-nums;
 }
 
-.invest-head .c4,
-.invest-row .c4 {
+.invest-head .c4 {
   padding: 0 100px;
+  position: relative;
+  overflow: visible;
+}
+
+.invest-row .c4 {
+  padding: 0 8px;
   position: relative;
   overflow: visible;
 }
