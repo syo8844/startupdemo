@@ -11,7 +11,7 @@ const fmt = (v) => new Intl.NumberFormat("ko-KR").format(Number(v ?? 0));
 const formatEokWon = (value) => {
   const amount = Number(value);
   if (!Number.isFinite(amount)) return "-";
-  const eok = Number((amount / 100_000_000).toFixed(1));
+  const eok = Math.round(amount / 100_000_000);
   return `${eok.toLocaleString("ko-KR")}억 원`;
 };
 
@@ -317,7 +317,7 @@ export default function HomePage() {
                         <div className="cell center">{row.corp_tag}</div>
                         <div className="cell center">{formatEokWon(row.total_investment)}</div>
                         <div className="cell center">{formatEokWon(row.corp_sales)}</div>
-                        <div className="cell center">{fmt(row.employee)}</div>
+                        <div className="cell center">{fmt(row.employee)}명</div>
                       </li>
                     ))}
                   </ul>
