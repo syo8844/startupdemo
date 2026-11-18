@@ -13,6 +13,12 @@ function formatEokWon(n) {
   const val = eok >= 10 ? Math.round(eok) : Math.round(eok * 10) / 10;
   return `${val.toLocaleString('ko-KR')}억 원`;
 }
+function formatEok(n) {
+  if (typeof n !== 'number' || Number.isNaN(n)) return '-';
+  const eok = n / 100_000_000;
+  const value = eok < 1 ? Math.round(eok * 10) / 10 : Math.round(eok);
+  return `${value.toLocaleString('ko-KR')}억`;
+}
 export default function CompanyDetailPage() {
   const { id } = useParams();
 
@@ -193,7 +199,7 @@ export default function CompanyDetailPage() {
                   <li className="invest-row" key={row.id}>
                     <div className="cell c1">{row.investor}</div>
                     <div className="cell c2">{row.rank}위</div>
-                    <div className="cell c3">{formatEokWon(row.amount)}</div>
+                    <div className="cell c3">{formatEok(row.amount)}</div>
                     <div className="cell c4">
                       <span className="comment-text">{row.comment || '-'}</span>
                       <span className="row-menu">

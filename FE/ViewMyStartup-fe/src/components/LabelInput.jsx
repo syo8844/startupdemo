@@ -16,6 +16,8 @@ export default function LabelInput({
   placeholder = '',
   rows = 4,
   maxLength,
+  min,
+  step,
   error, // 에러 prop 추가
   className = '',
 }) {
@@ -49,6 +51,8 @@ export default function LabelInput({
             placeholder={placeholder}
             disabled={disabled}
             maxLength={maxLength}
+            min={min}
+            step={step}
             autoComplete={isPassword ? 'new-password' : 'off'}
           />
         ) : (

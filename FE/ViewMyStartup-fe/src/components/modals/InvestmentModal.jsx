@@ -6,6 +6,8 @@ import OneButtonPopup from "./OneButtonPopup";
 import { postMyCorp, patchMyCorp } from "@/api/invest";
 import { postInvestCorp } from "@/api/compare";
 
+const MIN_INVESTMENT_AMOUNT = 50_000_000;
+
 function InvestmentModal({ isOpen, company, onClose, initialData }) {
   const navigate = useNavigate();
   const isEditMode = !!initialData; // 수정 모달이니?
@@ -36,6 +38,7 @@ function InvestmentModal({ isOpen, company, onClose, initialData }) {
   const isFormValid =
     investor.trim() !== "" &&
     amount.trim() !== "" &&
+    Number(amount) >= MIN_INVESTMENT_AMOUNT &&
     password.trim() !== "" &&
     passwordConfirm.trim() !== "" &&
     isPasswordMatching;
@@ -108,10 +111,12 @@ function InvestmentModal({ isOpen, company, onClose, initialData }) {
           required
         />
         <LabelInput
-          label="투자 금액"
+          label="투자 금액 (원, 최소 0.5억 원)"
           type="number"
           value={amount}
           onChange={setAmount}
+          min={MIN_INVESTMENT_AMOUNT}
+          step={1}
           required
         />
         <LabelInput

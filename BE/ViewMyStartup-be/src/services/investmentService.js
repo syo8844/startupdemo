@@ -2,6 +2,14 @@ import bcrypt from "bcrypt";
 import { prisma } from "../config/prisma.js";
 import { skip } from "node:test";
 
+const MIN_INVESTMENT_AMOUNT = 50_000_000;
+
+function validateInvestmentAmount(amount) {
+  if (!Number.isInteger(amount) || amount < MIN_INVESTMENT_AMOUNT) {
+    throw new Error("Investment amount must be at least 50,000,000 won");
+  }
+}
+
 const investmentService = {
   /* 투자 현황 조회 페이지 */
   getInvestments: async ({ offset, limit, sortBy, order }) => {
@@ -131,6 +139,7 @@ const investmentService = {
     password,
     passwordConfirm,
   }) => {
+    validateInvestmentAmount(amount);
     if (password !== passwordConfirm) {
       throw new Error("Passwords do not match");
     }
@@ -151,6 +160,7 @@ const investmentService = {
     id,
     { name, amount, amount_comment, password }
   ) => {
+    validateInvestmentAmount(amount);
     const investmentComment = await prisma.investment.findUnique({
       where: { id },
       select: {
