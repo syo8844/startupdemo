@@ -7,6 +7,7 @@ import { postMyCorp, patchMyCorp } from "@/api/invest";
 import { postInvestCorp } from "@/api/compare";
 
 const MIN_INVESTMENT_AMOUNT = 50_000_000;
+const MAX_INVESTMENT_AMOUNT = 1_000_000_000;
 
 function InvestmentModal({ isOpen, company, onClose, initialData }) {
   const navigate = useNavigate();
@@ -39,6 +40,7 @@ function InvestmentModal({ isOpen, company, onClose, initialData }) {
     investor.trim() !== "" &&
     amount.trim() !== "" &&
     Number(amount) >= MIN_INVESTMENT_AMOUNT &&
+    Number(amount) <= MAX_INVESTMENT_AMOUNT &&
     password.trim() !== "" &&
     passwordConfirm.trim() !== "" &&
     isPasswordMatching;
@@ -111,11 +113,12 @@ function InvestmentModal({ isOpen, company, onClose, initialData }) {
           required
         />
         <LabelInput
-          label="투자 금액 (원, 최소 0.5억 원)"
+          label="투자 금액 (원, 최소 0.5억 원 · 최대 10억 원)"
           type="number"
           value={amount}
           onChange={setAmount}
           min={MIN_INVESTMENT_AMOUNT}
+          max={MAX_INVESTMENT_AMOUNT}
           step={1}
           required
         />

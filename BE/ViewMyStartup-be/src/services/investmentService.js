@@ -3,10 +3,15 @@ import { prisma } from "../config/prisma.js";
 import { skip } from "node:test";
 
 const MIN_INVESTMENT_AMOUNT = 50_000_000;
+const MAX_INVESTMENT_AMOUNT = 1_000_000_000;
 
 function validateInvestmentAmount(amount) {
-  if (!Number.isInteger(amount) || amount < MIN_INVESTMENT_AMOUNT) {
-    throw new Error("Investment amount must be at least 50,000,000 won");
+  if (
+    !Number.isInteger(amount) ||
+    amount < MIN_INVESTMENT_AMOUNT ||
+    amount > MAX_INVESTMENT_AMOUNT
+  ) {
+    throw new Error("Investment amount must be between 50,000,000 and 1,000,000,000 won");
   }
 }
 

@@ -3,7 +3,9 @@ import bcrypt from "bcrypt";
 import { randomInt, randomUUID } from "node:crypto";
 import { prisma } from "../src/config/prisma.js";
 
-const MIN_INVESTORS_PER_COMPANY = 5;
+const MIN_INVESTORS_PER_COMPANY = 25;
+const MIN_INVESTMENT_AMOUNT = 50_000_000;
+const MAX_INVESTMENT_AMOUNT = 1_000_000_000;
 const DEMO_PASSWORD = "demo-investment";
 const FAMILY_NAMES = ["김", "이", "박", "최", "정", "강", "조", "윤", "장", "임"];
 const GIVEN_NAMES = [
@@ -12,12 +14,12 @@ const GIVEN_NAMES = [
   "시우", "다은", "건우", "하은", "우진", "소율", "선우", "예린",
 ];
 const COMMENTS = [
-  "[샘플 투자] 성장 가능성을 응원합니다.",
-  "[샘플 투자] 서비스의 시장성이 기대됩니다.",
-  "[샘플 투자] 앞으로의 성장을 지켜보겠습니다.",
-  "[샘플 투자] 좋은 팀과 제품이라고 생각합니다.",
-  "[샘플 투자] 새로운 도전을 응원합니다.",
-  "[샘플 투자] 꾸준한 성장을 기대합니다.",
+  "성장 가능성을 응원합니다.",
+  "서비스의 시장성이 기대됩니다.",
+  "앞으로의 성장을 지켜보겠습니다.",
+  "좋은 팀과 제품이라고 생각합니다.",
+  "새로운 도전을 응원합니다.",
+  "꾸준한 성장을 기대합니다.",
 ];
 
 const randomItem = (items) => items[randomInt(items.length)];
@@ -34,6 +36,22 @@ try {
   );
   const password = await bcrypt.hash(DEMO_PASSWORD, 10);
   const records = [];
+
+  const sampleComments = await prisma.investment.findMany({
+    where: { amount_comment: { contains: "샘플" } },
+    select: { id: true },
+  });
+  for (const investment of sampleComments) {
+    await prisma.investment.update({
+      where: { id: investment.id },
+      data: { amount_comment: randomItem(COMMENTS) },
+    });
+  }
+
+  const cappedAmounts = await prisma.investment.updateMany({
+    where: { amount: { gt: MAX_INVESTMENT_AMOUNT } },
+    data: { amount: MAX_INVESTMENT_AMOUNT },
+  });
 
   for (const company of companies) {
     const missing = Math.max(
@@ -54,7 +72,7 @@ try {
         corpId: company.id,
         name,
         password,
-        amount: randomInt(50_000_000, 1_500_000_001),
+        amount: randomInt(MIN_INVESTMENT_AMOUNT, MAX_INVESTMENT_AMOUNT + 1),
         amount_comment: randomItem(COMMENTS),
         isDeleted: false,
       });
@@ -66,7 +84,7 @@ try {
   }
 
   console.log(
-    `Added ${records.length} sample investors across ${companies.length} companies; each now has at least ${MIN_INVESTORS_PER_COMPANY} active records.`
+    `Added ${records.length} investors across ${companies.length} companies; each now has at least ${MIN_INVESTORS_PER_COMPANY} active records. Replaced ${sampleComments.length} sample comments and capped ${cappedAmounts.count} investment amounts.`
   );
 } finally {
   await prisma.$disconnect();

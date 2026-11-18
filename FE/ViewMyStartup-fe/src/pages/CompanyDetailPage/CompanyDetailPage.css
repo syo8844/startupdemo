@@ -23,7 +23,7 @@
 .hero-left {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 0;
 }
 
 .logo-wrap {
@@ -170,6 +170,8 @@
 
 .invest-head,
 .invest-row {
+  box-sizing: border-box;
+  width: 100%;
   display: grid;
   grid-template-columns: 100px 32px 104px minmax(0, 1fr);
 }

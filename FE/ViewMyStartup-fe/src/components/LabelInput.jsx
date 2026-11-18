@@ -17,6 +17,7 @@ export default function LabelInput({
   rows = 4,
   maxLength,
   min,
+  max,
   step,
   error, // 에러 prop 추가
   className = '',
@@ -52,6 +53,7 @@ export default function LabelInput({
             disabled={disabled}
             maxLength={maxLength}
             min={min}
+            max={max}
             step={step}
             autoComplete={isPassword ? 'new-password' : 'off'}
           />
