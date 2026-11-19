@@ -20,8 +20,8 @@ const ORDER_OPTIONS = [
 const ORDER_TO_QUERY = {
   vms_desc: { sortBy: "virtual", order: "Highest" },
   vms_asc: { sortBy: "virtual", order: "Lowest" },
-  actual_desc: { sortBy: "total", order: "Highest" },
-  actual_asc: { sortBy: "total", order: "Lowest" },
+  actual_desc: { sortBy: "real", order: "Highest" },
+  actual_asc: { sortBy: "real", order: "Lowest" },
 };
 
 const formatWon = (n) => {

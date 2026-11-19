@@ -3,7 +3,7 @@ import { API_BASE } from '@/lib/apiBase';
 /**
  * 투자 랭킹 데이터 조회
  * @param {Object} opt
- * @param {"virtual"|"total"} [opt.sortBy="virtual"]
+ * @param {"virtual"|"real"} [opt.sortBy="virtual"]
  * @param {"Highest"|"Lowest"} [opt.order="Highest"]
  * @param {number} [opt.offset=0]
  * @param {number} [opt.limit=1000]

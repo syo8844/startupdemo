@@ -90,12 +90,24 @@ const investmentService = {
           corp_profile: true,
           corp_image: true,
           total_investment: true,
+          Investment: {
+            select: { amount: true },
+          },
         },
       });
 
       const total = await prisma.corp.count();
 
-      return { data: realInvestments, total };
+      const data = realInvestments.map(({ Investment, ...corp }) => ({
+        ...corp,
+        corpId: corp.id,
+        virtual_investment: Investment.reduce(
+          (sum, investment) => sum + investment.amount,
+          0
+        ),
+      }));
+
+      return { data, total };
     }
 
     throw new Error("Invaild sortBy value");

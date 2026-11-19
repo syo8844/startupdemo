@@ -16,6 +16,15 @@ import {
 const formatNumber = (value) =>
   new Intl.NumberFormat('ko-KR').format(value || 0);
 
+const formatEok = (value) => {
+  const amount = Number(value || 0);
+  if (!Number.isFinite(amount)) return '-';
+
+  return `${new Intl.NumberFormat('ko-KR', {
+    maximumFractionDigits: 1,
+  }).format(amount / 100_000_000)}억 원`;
+};
+
 export default function ComparePage() {
   const [compareOrder, setCompareOrder] = useState('investmentHighest');
   const [rankOrder, setRankOrder] = useState('investmentHighest');
@@ -209,10 +218,10 @@ export default function ComparePage() {
                       </div>
                       <div className="grid-cell">{corp.corp_tag}</div>
                       <div className="grid-cell">
-                        {formatNumber(corp.total_investment)} 원
+                        {formatEok(corp.total_investment)}
                       </div>
                       <div className="grid-cell">
-                        {formatNumber(corp.corp_sales)} 원
+                        {formatEok(corp.corp_sales)}
                       </div>
                       <div className="grid-cell">
                         {formatNumber(corp.employee)} 명
@@ -265,10 +274,10 @@ export default function ComparePage() {
                       </div>
                       <div className="grid-cell">{corp.corp_tag}</div>
                       <div className="grid-cell">
-                        {formatNumber(corp.total_investment)} 원
+                        {formatEok(corp.total_investment)}
                       </div>
                       <div className="grid-cell">
-                        {formatNumber(corp.corp_sales)} 원
+                        {formatEok(corp.corp_sales)}
                       </div>
                       <div className="grid-cell">
                         {formatNumber(corp.employee)} 명
