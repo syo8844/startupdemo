@@ -151,10 +151,14 @@ body {
 }
 
 .corp-intro {
+  width: 100%;
   min-width: 0;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
+  line-height: 1.4;
+  max-height: 2.8em;
   overflow: hidden;
   overflow-wrap: anywhere;
   text-align: left;

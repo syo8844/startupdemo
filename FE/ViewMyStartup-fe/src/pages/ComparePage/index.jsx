@@ -145,7 +145,7 @@ export default function ComparePage() {
         setCompareCompanies={setCompareCompanies}
       />
       <CardContainer
-        title={'어떤 기업이 궁금하세요?'}
+        title={''}
         desc={'(최대 5개)'}
         btnName={'기업 추가하기'}
         companyList={compareCompanies}
@@ -213,8 +213,8 @@ export default function ComparePage() {
                         />
                         <div className="corp-name">{corp.corp_name}</div>
                       </div>
-                      <div className="grid-cell corp-intro">
-                        {corp.corp_profile}
+                      <div className="grid-cell corp-intro-cell">
+                        <div className="corp-intro">{corp.corp_profile}</div>
                       </div>
                       <div className="grid-cell">{corp.corp_tag}</div>
                       <div className="grid-cell">
@@ -269,8 +269,8 @@ export default function ComparePage() {
                         />
                         <div className="corp-name">{corp.corp_name}</div>
                       </div>
-                      <div className="grid-cell corp-intro">
-                        {corp.corp_profile}
+                      <div className="grid-cell corp-intro-cell">
+                        <div className="corp-intro">{corp.corp_profile}</div>
                       </div>
                       <div className="grid-cell">{corp.corp_tag}</div>
                       <div className="grid-cell">
