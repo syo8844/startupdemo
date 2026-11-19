@@ -8,6 +8,8 @@ function asyncHandler(handler) {
       if (
         e.name === "StructError" ||
         e instanceof Prisma.PrismaClientValidationError ||
+        e.message ===
+          "Investment amount must be an integer between 50,000,000 and 2,147,483,647 won" ||
         e.message === "Password confirmation is required" ||
         e.message === "New password is required" ||
         e.message === "New passwords do not match"

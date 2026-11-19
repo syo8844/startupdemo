@@ -397,6 +397,7 @@
 .invest-page .order-dropdown {
   position: relative;
   z-index: 20;
+  margin-left: auto;
 }
 
 .invest-page .order-dropdown .dropdown {

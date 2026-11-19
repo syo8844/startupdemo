@@ -7,7 +7,7 @@ import { postMyCorp, patchMyCorp } from "@/api/invest";
 import { postInvestCorp } from "@/api/compare";
 
 const MIN_INVESTMENT_AMOUNT = 50_000_000;
-const MAX_INVESTMENT_AMOUNT = 1_000_000_000;
+const MAX_INVESTMENT_AMOUNT = 2_147_483_647;
 
 function InvestmentModal({ isOpen, company, onClose, onSuccess, initialData }) {
   const navigate = useNavigate();
@@ -55,7 +55,7 @@ function InvestmentModal({ isOpen, company, onClose, onSuccess, initialData }) {
   const isFormValid =
     investor.trim() !== "" &&
     normalizedAmount !== "" &&
-    Number.isFinite(amountValue) &&
+    Number.isInteger(amountValue) &&
     amountValue >= MIN_INVESTMENT_AMOUNT &&
     amountValue <= MAX_INVESTMENT_AMOUNT &&
     isPasswordValid;

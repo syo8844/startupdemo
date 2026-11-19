@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import { prisma } from "../config/prisma.js";
 
 const MIN_INVESTMENT_AMOUNT = 50_000_000;
-const MAX_INVESTMENT_AMOUNT = 1_000_000_000;
+const MAX_INVESTMENT_AMOUNT = 2_147_483_647;
 
 function validateInvestmentAmount(amount) {
   if (
@@ -10,7 +10,9 @@ function validateInvestmentAmount(amount) {
     amount < MIN_INVESTMENT_AMOUNT ||
     amount > MAX_INVESTMENT_AMOUNT
   ) {
-    throw new Error("Investment amount must be between 50,000,000 and 1,000,000,000 won");
+    throw new Error(
+      "Investment amount must be an integer between 50,000,000 and 2,147,483,647 won"
+    );
   }
 }
 
