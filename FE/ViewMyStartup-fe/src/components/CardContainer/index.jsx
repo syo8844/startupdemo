@@ -17,11 +17,10 @@ function CardContainer({
   onSelectCompare, // ComparePage로부터 받을 비교 기업 선택 함수
   companyList, // ComparePage로부터 받을 비교 기업들 정보
   onRemove, // ComparePage로부터 받을 카드 제거 함수
-  setMyCompany,
-  setCompareCompanies,
   isCompareAddDisabled, // 비교 기업 추가 버튼 비활성화 여부
   //isData = false,
   myCompanyId,
+  isMyCompanyCard = false,
 }) {
   const [isMyModalOpen, setIsMyModalOpen] = useState(null);
   const [isCompareModalOpen, setIsCompareModalOpen] = useState(null);
@@ -32,17 +31,7 @@ function CardContainer({
     setIsCompareModalOpen(true);
   };
 
-  // 나의 기업 컨테이너면 상태 초기화 비교 기업 컨테이너면 모달 open
-  const handleButtonClick = title.includes("나의 기업")
-    ? // "다른 기업 비교하기" 버튼 클릭 시
-      () => {
-        // 상태를 먼저 초기화하고, 모달을 엽니다.
-        // 이렇게 하면 ComparePage가 먼저 리렌더링되고, 그 다음에 모달이 열리므로 중복 호출을 방지할 수 있습니다.
-        setMyCompany(null);
-        setCompareCompanies([]);
-        openMyCompanyModal();
-      }
-    : openCompareCompanyModal; // "기업 추가하기" 버튼 클릭 시
+  const handleButtonClick = openCompareCompanyModal;
 
   const handleSelectMyCompanyAndClose = (company) => {
     onSelectCompany(company);
@@ -85,16 +74,9 @@ function CardContainer({
       <div className="card-main">
         {(() => {
           // "나의 기업" 카드 컨테이너일 경우
-          if (title.includes("나의 기업")) {
+          if (isMyCompanyCard) {
             if (selectedCompany) {
               return (
-                // "다른 기업 비교하기" 버튼 클릭 시
-                // 상태를 먼저 초기화하고, 모달을 엽니다.
-                // 이렇게 하면 ComparePage가 먼저 리렌더링되고, 그 다음에 모달이 열리므로 중복 호출을 방지할 수 있습니다.
-                // setMyCompany(null);
-                // setCompareCompanies([]);
-                // openMyCompanyModal();
-
                 <CardAdded
                   key={selectedCompany.id}
                   companyLogo={selectedCompany.corp_image} // logoUrl은 이미 올바른 키라고 가정

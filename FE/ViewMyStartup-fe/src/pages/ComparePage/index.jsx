@@ -10,7 +10,6 @@ import {
   getRankList,
   deleteMyCorpAll,
   deleteCompareCorpAll,
-  deleteCompareCorp,
 } from '@/api/compare';
 
 const formatNumber = (value) =>
@@ -85,12 +84,6 @@ export default function ComparePage() {
     setCompareCompanies([]);
   };
 
-  const handleRemoveCompareCompany = async (companyId) => {
-    await deleteCompareCorp(companyId);
-    setCompareCompanies((prev) =>
-      prev.filter((company) => company.id !== companyId),
-    );
-  };
   useEffect(() => {
     const initialize = async () => {
       try {
@@ -136,24 +129,16 @@ export default function ComparePage() {
   return (
     <div className="compare-page">
       <CardContainer
-        title={'나의 기업을 선택해주세요!'}
+        title={'내가 선택한 기업'}
         btnName={myCompany ? '다른 기업 비교하기' : ''}
         selectedCompany={myCompany}
         onSelectCompany={handleSelectMyCompany}
         onRemove={handleRemoveMyCompany}
-        setMyCompany={setMyCompany}
-        setCompareCompanies={setCompareCompanies}
-      />
-      <CardContainer
-        title={''}
-        desc={'(최대 5개)'}
-        btnName={'기업 추가하기'}
-        companyList={compareCompanies}
         onSelectCompare={handleConfirmCompare}
-        onRemove={handleRemoveCompareCompany}
+        companyList={compareCompanies}
         isCompareAddDisabled={!myCompany || compareCompanies.length >= 5}
-        isData={compareCompanies.length > 0}
         myCompanyId={myCompany?.id}
+        isMyCompanyCard
       />
 
       {showCompareButton && (
