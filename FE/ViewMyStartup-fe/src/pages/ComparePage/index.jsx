@@ -128,32 +128,34 @@ export default function ComparePage() {
 
   return (
     <div className="compare-page">
-      <CardContainer
-        title={'내가 선택한 기업'}
-        btnName={myCompany ? '다른 기업 비교하기' : ''}
-        selectedCompany={myCompany}
-        onSelectCompany={handleSelectMyCompany}
-        onRemove={handleRemoveMyCompany}
-        onSelectCompare={handleConfirmCompare}
-        companyList={compareCompanies}
-        myCompanyId={myCompany?.id}
-        isMyCompanyCard
-      />
-
       {showCompareButton && (
-        <div className="btn-center">
-          <LargeButton
-            onClick={handleCompareClick}
-            disabled={!myCompany && compareCompanies.length === 0}
-            variant={
-              !myCompany || compareCompanies.length === 0
-                ? 'inactive'
-                : 'active'
-            }
-          >
-            기업 비교하기
-          </LargeButton>
-        </div>
+        <>
+          <CardContainer
+            title={'내가 선택한 기업'}
+            btnName={myCompany ? '다른 기업 비교하기' : ''}
+            selectedCompany={myCompany}
+            onSelectCompany={handleSelectMyCompany}
+            onRemove={handleRemoveMyCompany}
+            onSelectCompare={handleConfirmCompare}
+            companyList={compareCompanies}
+            myCompanyId={myCompany?.id}
+            isMyCompanyCard
+          />
+
+          <div className="btn-center">
+            <LargeButton
+              onClick={handleCompareClick}
+              disabled={!myCompany && compareCompanies.length === 0}
+              variant={
+                !myCompany || compareCompanies.length === 0
+                  ? 'inactive'
+                  : 'active'
+              }
+            >
+              기업 비교하기
+            </LargeButton>
+          </div>
+        </>
       )}
 
       {!showCompareButton && resultList.length > 0 ? (
