@@ -9,6 +9,7 @@ import {
   getCompareList,
   getRankList,
   deleteMyCorpAll,
+  deleteCompareCorp,
   deleteCompareCorpAll,
 } from '@/api/compare';
 
@@ -85,6 +86,18 @@ export default function ComparePage() {
     setCompareCompanies([]);
   };
 
+  const handleRemoveCompareCompany = async (companyId) => {
+    try {
+      await deleteCompareCorp(companyId);
+      setCompareCompanies((companies) =>
+        companies.filter((company) => company.id !== companyId),
+      );
+    } catch (error) {
+      console.error('비교 기업 삭제 중 오류:', error);
+      alert('비교 기업 삭제 중 오류가 발생하였습니다.');
+    }
+  };
+
   useEffect(() => {
     const initialize = async () => {
       try {
@@ -129,24 +142,35 @@ export default function ComparePage() {
 
   return (
     <div className="compare-page">
+      <CardContainer
+        title={'내가 선택한 기업'}
+        btnName={myCompany ? '다른 기업 비교하기' : ''}
+        selectedCompany={myCompany}
+        onSelectCompany={handleSelectMyCompany}
+        onRemove={handleRemoveMyCompany}
+        onSelectCompare={handleConfirmCompare}
+        companyList={compareCompanies}
+        myCompanyId={myCompany?.id}
+        isMyCompanyCard
+      />
+
       {showCompareButton && (
         <>
           <CardContainer
-            title={'내가 선택한 기업'}
-            btnName={myCompany ? '다른 기업 비교하기' : ''}
-            selectedCompany={myCompany}
-            onSelectCompany={handleSelectMyCompany}
-            onRemove={handleRemoveMyCompany}
+            title="어떤 기업이 궁금하세요?"
+            desc="(최대 5개)"
+            btnName="기업 추가하기"
             onSelectCompare={handleConfirmCompare}
+            onRemove={handleRemoveCompareCompany}
             companyList={compareCompanies}
             myCompanyId={myCompany?.id}
-            isMyCompanyCard
+            isCompareAddDisabled={compareCompanies.length >= 5}
           />
 
           <div className="btn-center">
             <LargeButton
               onClick={handleCompareClick}
-              disabled={!myCompany && compareCompanies.length === 0}
+              disabled={!myCompany || compareCompanies.length === 0}
               variant={
                 !myCompany || compareCompanies.length === 0
                   ? 'inactive'
