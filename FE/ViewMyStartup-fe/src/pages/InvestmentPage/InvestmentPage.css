@@ -400,6 +400,10 @@
   margin-left: auto;
 }
 
+.invest-page .title-row {
+  width: 100%;
+}
+
 .invest-page .order-dropdown .dropdown {
   position: relative;
   z-index: 30;
