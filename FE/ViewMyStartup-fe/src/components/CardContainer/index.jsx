@@ -15,6 +15,8 @@ function CardContainer({
   selectedCompany, // ComparePage로부터 받을 나의 기업 정보
   onSelectCompany, // ComparePage로부터 받을 기업 선택 함수
   onSelectCompare, // ComparePage로부터 받을 비교 기업 선택 함수
+  onHeaderButtonClick,
+  headerButtonClassName = '',
   companyList, // ComparePage로부터 받을 비교 기업들 정보
   onRemove, // ComparePage로부터 받을 카드 제거 함수
   isCompareAddDisabled, // 비교 기업 추가 버튼 비활성화 여부
@@ -31,7 +33,7 @@ function CardContainer({
     setIsCompareModalOpen(true);
   };
 
-  const handleButtonClick = openCompareCompanyModal;
+  const handleButtonClick = onHeaderButtonClick || openCompareCompanyModal;
 
   const handleSelectMyCompanyAndClose = (company) => {
     onSelectCompany(company);
@@ -64,6 +66,7 @@ function CardContainer({
             onClick={handleButtonClick}
             variant={isCompareAddDisabled ? "inactive" : "active"}
             disabled={isCompareAddDisabled}
+            className={headerButtonClassName}
           >
             {btnName}
           </LargeButton>

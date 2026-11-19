@@ -173,3 +173,21 @@ body {
   font-size: 12px;
   font-weight: 400;
 }
+
+.compare-page .reset-button {
+  min-width: 0;
+  height: 40px;
+  padding: 8px 16px;
+  font-size: 14px;
+}
+
+.compare-page .reset-button .vms-btn__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.compare-page .reset-icon {
+  width: 18px;
+  height: 18px;
+}
