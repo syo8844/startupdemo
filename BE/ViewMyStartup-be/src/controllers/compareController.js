@@ -112,9 +112,8 @@ export async function getMyCompareAndMyCompareController(req, res) {
 }
 
 export async function getRankingCompareController(req, res) {
-  const { offset = 0, limit = 6, order = "investment_desc" } = req.query;
-  const data = { offset, limit, order };
-  const compare = await getRankingCompare(data);
+  const { order = "investmentHighest" } = req.query;
+  const compare = await getRankingCompare({ order });
   res.send(compare);
 }
 

@@ -297,47 +297,27 @@ router.get("/comparead", asyncHandler(getMyCompareAndMyCompareController));
  * @openapi
  * /compare/comparerank:
  *   get:
- *     summary: 선택된 기업 목록에 전역 투자금 랭킹 부착
- *     description: 선택된 corpId들만 대상으로 기업 정보를 조회하고, 전체 Corp 테이블 기준 투자금 랭킹(investment_rank)을 부착합니다.
+ *     summary: 내 기업 기준 상위·하위 인접 기업 5개 조회
+ *     description: 정렬 기준에 따라 전체 기업의 순위를 계산하고, 내 기업과 순위가 인접한 기업 최대 4개를 함께 반환합니다.
  *     tags:
  *       - Compare
  *     parameters:
- *       - in: query
- *         name: offset
- *         schema:
- *           type: integer
- *           minimum: 0
- *           default: 0
- *         description: 페이지 오프셋
- *       - in: query
- *         name: limit
- *         schema:
- *           type: integer
- *           minimum: 1
- *           default: 6
- *         description: 페이지 크기
  *       - in: query
  *         name: order
  *         schema:
  *           type: string
  *           enum:
- *             - investment_desc
- *             - investment_asc
- *             - sales_desc
- *             - sales_asc
- *             - employee_desc
- *             - employee_asc
  *             - investmentHighest
  *             - investmentLowest
  *             - salesHighest
  *             - salesLowest
  *             - employeeHighest
  *             - employeeLowest
- *           default: investment_desc
- *         description: 정렬 기준 (신/구 포맷 모두 지원)
+ *           default: investmentHighest
+ *         description: 정렬 기준. 내 기업 순위 기준으로 앞뒤 2개를 반환하며, 경계에서는 최대 5개를 반환합니다.
  *     responses:
  *       '200':
- *         description: 선택된 기업 목록(정렬/페이징) + 전역 투자금 랭킹
+ *         description: 내 기업을 포함한 최대 5개 기업 및 해당 정렬 기준의 순위
  *       '500':
  *         description: 서버 오류
  */

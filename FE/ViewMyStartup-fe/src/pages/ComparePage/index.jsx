@@ -291,14 +291,14 @@ export default function ComparePage() {
                 {rankList.map((corp, index) => {
                   const isMyCompany = myCompany && myCompany.id === corp.id;
                   const myCompanyRowStyle = isMyCompany ? 'myCompany-row' : '';
-                  const isLastRow = index === sortedResultList.length - 1;
+                  const isLastRow = index === rankList.length - 1;
                   const lastRowStyle = isLastRow ? 'is-last-row' : '';
                   return (
                     <div
                       key={corp.id}
                       className={`grid-row ${myCompanyRowStyle} ${lastRowStyle}`}
                     >
-                      <div className="grid-cell">{corp.investment_rank}위</div>
+                      <div className="grid-cell">{corp.rank}위</div>
                       <div className="grid-cell company-cell">
                         <img
                           src={corp.logo || corp.corp_image}

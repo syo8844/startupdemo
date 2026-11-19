@@ -447,7 +447,7 @@ export async function getMyCompareAndMyCompare() {
   return corpId;
 }
 
-export async function getRankingCompare({ offset, limit, order }) {
+export async function getRankingCompare({ order }) {
   let orderBy;
   switch (order) {
     case "investmentLowest":
@@ -472,14 +472,18 @@ export async function getRankingCompare({ offset, limit, order }) {
       orderBy = { total_investment: "desc" };
   }
 
-  const corpId = await getMyCompareAndMyCompare();
-  if (!corpId.length) return [];
+  const myCompany = await prisma.my_compare_corp.findFirst({
+    where: {
+      userId: DEFAULT_USER_ID,
+      isDeleted: false,
+    },
+    orderBy: { updated_at: "desc" },
+    select: { corpId: true },
+  });
+  if (!myCompany?.corpId) return [];
 
-  const compareCorps = await prisma.corp.findMany({
-    where: { id: { in: corpId } },
-    orderBy: [orderBy, { created_at: "desc" }],
-    skip: parseInt(offset),
-    take: parseInt(limit),
+  const rankedCorps = await prisma.corp.findMany({
+    orderBy: [orderBy, { created_at: "asc" }, { id: "asc" }],
     select: {
       id: true,
       corp_name: true,
@@ -492,26 +496,22 @@ export async function getRankingCompare({ offset, limit, order }) {
     },
   });
 
-  const rankingCorp = await prisma.corp.findMany({
-    select: {
-      id: true,
-    },
-    orderBy: [
-      { total_investment: "desc" },
-      { created_at: "asc" },
-      { id: "asc" },
-    ],
-  });
-
-  const rankMap = new Map();
-  rankingCorp.forEach((row, idx) => {
-    rankMap.set(row.id, idx + 1);
-  });
-
-  return compareCorps.map((c) => ({
-    ...c,
-    investment_rank: rankMap.get(c.id) ?? null,
+  const rankedCompanies = rankedCorps.map((corp, index) => ({
+    ...corp,
+    rank: index + 1,
   }));
+  const myCompanyIndex = rankedCompanies.findIndex(
+    (corp) => corp.id === myCompany.corpId,
+  );
+  if (myCompanyIndex === -1) return [];
+
+  const visibleCount = 5;
+  const firstIndex = Math.min(
+    Math.max(myCompanyIndex - 2, 0),
+    Math.max(rankedCompanies.length - visibleCount, 0),
+  );
+
+  return rankedCompanies.slice(firstIndex, firstIndex + visibleCount);
 }
 
 export async function getOrderCompare({ offset, limit, order }) {
