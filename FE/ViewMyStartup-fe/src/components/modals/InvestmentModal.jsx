@@ -14,7 +14,7 @@ function InvestmentModal({ isOpen, company, onClose, onSuccess, initialData }) {
   const isEditMode = !!initialData; // 수정 모달이니?
 
   const [investor, setInvestor] = useState(initialData?.investor || "");
-  const [amount, setAmount] = useState(initialData?.amount || "");
+  const [amount, setAmount] = useState(String(initialData?.amount ?? ""));
   const [comment, setComment] = useState(initialData?.comment || "");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
@@ -25,7 +25,7 @@ function InvestmentModal({ isOpen, company, onClose, onSuccess, initialData }) {
     if (!isOpen) return;
 
     setInvestor(initialData?.investor || "");
-    setAmount(initialData?.amount || "");
+    setAmount(String(initialData?.amount ?? ""));
     setComment(initialData?.comment || "");
     setPassword(initialData?.password || "");
     setPasswordConfirm("");
@@ -40,11 +40,14 @@ function InvestmentModal({ isOpen, company, onClose, onSuccess, initialData }) {
       : "";
 
   // 모든 필수 필드가 채워졌는지 확인
+  const normalizedAmount = String(amount ?? "").trim();
+  const amountValue = Number(normalizedAmount);
   const isFormValid =
     investor.trim() !== "" &&
-    amount.trim() !== "" &&
-    Number(amount) >= MIN_INVESTMENT_AMOUNT &&
-    Number(amount) <= MAX_INVESTMENT_AMOUNT &&
+    normalizedAmount !== "" &&
+    Number.isFinite(amountValue) &&
+    amountValue >= MIN_INVESTMENT_AMOUNT &&
+    amountValue <= MAX_INVESTMENT_AMOUNT &&
     password.trim() !== "" &&
     (isEditMode || (passwordConfirm.trim() !== "" && isPasswordMatching));
 
@@ -57,7 +60,7 @@ function InvestmentModal({ isOpen, company, onClose, onSuccess, initialData }) {
   const handleInvestSubmit = async () => {
     const payload = {
       name: investor, // 'investor'를 'name'으로 변경
-      amount: Number(amount),
+      amount: amountValue,
       amount_comment: comment,
       password: isEditMode ? initialData.password : password,
       ...(!isEditMode ? { passwordConfirm } : {}),
