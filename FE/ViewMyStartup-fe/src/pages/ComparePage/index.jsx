@@ -54,14 +54,15 @@ export default function ComparePage() {
       return;
     }
 
+    setShowCompareButton(false);
+
     try {
       const response = await getCompareList({ order: compareOrder });
       const rankResponse = await getRankList({ order: rankOrder });
       setResultList(response.data);
       setRankList(rankResponse.data);
-
-      setShowCompareButton(false);
     } catch (error) {
+      setShowCompareButton(true);
       console.error('기업 비교 API 호출 중 오류: ', error);
       alert('기업 비교 중 오류가 발생하였습니다.');
     }
