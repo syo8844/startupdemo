@@ -37,12 +37,12 @@ export default function ComparePage() {
   const [showCompareButton, setShowCompareButton] = useState(true);
 
   const orderOptions = [
-    { value: 'investmentHighest', label: '투자금 많은 순' },
-    { value: 'investmentLowest', label: '투자금 적은 순' },
-    { value: 'salesHighest', label: '매출 높은 순' },
-    { value: 'salesLowest', label: '매출 낮은 순' },
-    { value: 'employeeHighest', label: '사원 많은 순' },
-    { value: 'employeeLowest', label: '사원 적은 순' },
+    { value: 'investmentHighest', label: '누적 투자금액 높은순' },
+    { value: 'investmentLowest', label: '누적 투자금액 낮은순' },
+    { value: 'salesHighest', label: '매출액 높은순' },
+    { value: 'salesLowest', label: '매출액 낮은순' },
+    { value: 'employeeHighest', label: '고용 인원 많은순' },
+    { value: 'employeeLowest', label: '고용 인원 적은순' },
   ];
 
   const handleCompareClick = async () => {

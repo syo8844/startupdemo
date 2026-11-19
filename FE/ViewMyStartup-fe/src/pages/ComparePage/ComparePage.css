@@ -163,3 +163,13 @@ body {
   overflow-wrap: anywhere;
   text-align: left;
 }
+
+.compare-page .vms-dropdown-list {
+  min-width: 168px;
+}
+
+.compare-page .vms-dropdown-item {
+  padding: 12px 10px;
+  font-size: 12px;
+  font-weight: 400;
+}
