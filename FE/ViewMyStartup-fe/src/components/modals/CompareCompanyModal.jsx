@@ -5,7 +5,11 @@ import SearchBar from '@/components/SearchBar';
 import Pagination from '@/components/Pagination';
 import '../../components/modals/Modal.css';
 import CompanySelectRow from '../CompanySelectRow';
-import { getCompareCorpList, postCompareCorp } from '@/api/compare';
+import {
+  deleteCompareCorp,
+  getCompareCorpList,
+  postCompareCorp,
+} from '@/api/compare';
 import Loading from '../Loading';
 
 const LIMIT = 5;
@@ -108,9 +112,18 @@ export default function CompareCompanyModal({
         const postData = async () => {
           // ref에 저장된 최신 selectedList를 사용합니다.
           const listToPost = selectedListRef.current;
+          const selectedIds = new Set(listToPost.map((corp) => corp.id));
+          const initialIds = new Set(initialSelection.map((corp) => corp.id));
           try {
             await Promise.all(
-              listToPost.map((corp) => postCompareCorp(corp.id)),
+              [
+                ...listToPost
+                  .filter((corp) => !initialIds.has(corp.id))
+                  .map((corp) => postCompareCorp(corp.id)),
+                ...initialSelection
+                  .filter((corp) => !selectedIds.has(corp.id))
+                  .map((corp) => deleteCompareCorp(corp.id)),
+              ],
             );
             onConfirm(listToPost);
           } catch (error) {
@@ -120,7 +133,7 @@ export default function CompareCompanyModal({
         postData();
       }
     };
-  }, [isOpen, onConfirm]); // selectedList를 의존성 배열에서 제거하여 클릭 시마다 API가 호출되는 것을 방지합니다.
+  }, [isOpen, initialSelection, onConfirm]); // selectedList를 의존성 배열에서 제거하여 클릭 시마다 API가 호출되는 것을 방지합니다.
 
   // 이제 listToRender는 항상 API에서 받아온 data 상태를 사용합니다.
   const listToRender = data;

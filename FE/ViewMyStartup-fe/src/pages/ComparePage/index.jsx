@@ -136,7 +136,6 @@ export default function ComparePage() {
         onRemove={handleRemoveMyCompany}
         onSelectCompare={handleConfirmCompare}
         companyList={compareCompanies}
-        isCompareAddDisabled={!myCompany || compareCompanies.length >= 5}
         myCompanyId={myCompany?.id}
         isMyCompanyCard
       />
