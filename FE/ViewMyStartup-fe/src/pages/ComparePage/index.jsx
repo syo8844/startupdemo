@@ -145,7 +145,11 @@ export default function ComparePage() {
       <CardContainer
         title="나의 기업을 선택해 주세요!"
         btnName={
-          myCompany ? (
+          !myCompany ? (
+            ''
+          ) : !showCompareButton ? (
+            '다른 기업 비교하기'
+          ) : (
             <>
               <svg
                 className="reset-icon"
@@ -164,14 +168,14 @@ export default function ComparePage() {
               </svg>
               전체 초기화
             </>
-          ) : (
-            ''
           )
         }
         selectedCompany={myCompany}
         onSelectCompany={handleSelectMyCompany}
         onRemove={handleRemoveMyCompany}
-        onHeaderButtonClick={handleRemoveMyCompany}
+        onHeaderButtonClick={
+          showCompareButton ? handleRemoveMyCompany : undefined
+        }
         headerButtonClassName="reset-button"
         isMyCompanyCard
       />
