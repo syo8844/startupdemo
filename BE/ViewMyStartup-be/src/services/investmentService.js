@@ -1,6 +1,5 @@
 import bcrypt from "bcrypt";
 import { prisma } from "../config/prisma.js";
-import { skip } from "node:test";
 
 const MIN_INVESTMENT_AMOUNT = 50_000_000;
 const MAX_INVESTMENT_AMOUNT = 1_000_000_000;
@@ -138,6 +137,7 @@ const investmentService = {
 
   /* 투자자 코멘트 글 작성 */
   createInvestmentComment: async ({
+    corpId,
     name,
     amount,
     amount_comment,
@@ -152,7 +152,13 @@ const investmentService = {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const investmentComment = await prisma.investment.create({
-      data: { name, amount, amount_comment, password: hashedPassword },
+      data: {
+        corpId,
+        name,
+        amount,
+        amount_comment,
+        password: hashedPassword,
+      },
       select: {
         account: true,
       },
@@ -186,6 +192,24 @@ const investmentService = {
       where: { id },
       data: { name, amount, amount_comment },
     });
+  },
+
+  verifyInvestmentPassword: async (id, password) => {
+    if (!password) throw new Error("Password is required");
+
+    const investmentComment = await prisma.investment.findUnique({
+      where: { id },
+      select: { password: true },
+    });
+    if (!investmentComment) {
+      throw new Error("Cannot find given id");
+    }
+
+    const isValid = await bcrypt.compare(password, investmentComment.password);
+    if (!isValid) {
+      throw new Error("Password is not valid");
+    }
+    return true;
   },
 
   /* 투자자 코멘트 글 삭제 */

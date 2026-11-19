@@ -40,9 +40,10 @@ const investmentController = {
 
   //투자자 코멘트 글 작성
   createInvestmentComment: async (req, res) => {
-    const { name, amount, amount_comment, password, passwordConfirm } =
-      req.body;
+    const { id: corpId } = req.params;
+    const { name, amount, amount_comment, password, passwordConfirm } = req.body;
     const investmentComment = await investmentService.createInvestmentComment({
+      corpId,
       name,
       amount,
       amount_comment,
@@ -67,6 +68,14 @@ const investmentController = {
       message: "Updated successfully",
       investmentComment: updatedInvestmentComment,
     });
+  },
+
+  //투자자 코멘트 수정/삭제 전 비밀번호 검증
+  verifyInvestmentPassword: async (req, res) => {
+    const { id } = req.params;
+    const { password } = req.body;
+    await investmentService.verifyInvestmentPassword(id, password);
+    res.send({ valid: true });
   },
 
   //투자자 코멘트 글 삭제

@@ -55,13 +55,16 @@ import LargeButton from '@/components/LargeButton';
  *  isConfirmDisabled?: boolean;
  * }} [props.footer]
  */
-function Modal({ isOpen, onClose, title, children, footer }) {
+function Modal({ isOpen, onClose, title, children, footer, className = "" }) {
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div className={`modal-overlay ${className ? `${className}-overlay` : ""}`} onClick={onClose}>
       {/* 내부 클릭시 닫히지 않도록 이벤트 버블링 막기 */}
-      <div className="modal-content-box" onClick={(e) => e.stopPropagation()}>
+      <div
+        className={`modal-content-box ${className}`.trim()}
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* 닫기 버튼과 제목이 있는 경우에만 보여주고 싶을 때 */}
         {/* {(title || onClose) && ( */}
         <div className="modal-header">

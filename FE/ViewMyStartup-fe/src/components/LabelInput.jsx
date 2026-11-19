@@ -21,6 +21,8 @@ export default function LabelInput({
   step,
   error, // 에러 prop 추가
   className = '',
+  controlClassName = '',
+  defaultEyeIconVisible = false,
 }) {
   const [showPw, setShowPw] = React.useState(false);
   const isPassword = type === 'password';
@@ -33,14 +35,14 @@ export default function LabelInput({
   const handleChange = (e) => onChange && onChange(e.target.value);
 
   return (
-    <div className={`${styles.field} ${className}`}>
+    <div className={`${styles.field} ${className}`.trim()}>
       {label && (
         <label htmlFor={inputId} className={styles.label}>
           {label}{required && <span className={styles.requiredMark}>*</span>}
         </label>
       )}
       {/* 에러 스타일 추가 */}
-      <div className={`${styles.control} ${multiline ? styles.asTextarea : styles.asInput} ${error ? styles.error : ''}`}>
+      <div className={`${styles.control} ${multiline ? styles.asTextarea : styles.asInput} ${error ? styles.error : ''} ${controlClassName}`.trim()}>
         {!multiline ? (
           <input
             id={inputId}
@@ -79,7 +81,13 @@ export default function LabelInput({
             disabled={disabled}
           >
             <img
-              src={showPw ? visibilityOnIcon : visibilityOffIcon}
+              src={
+                showPw
+                  ? visibilityOffIcon
+                  : defaultEyeIconVisible
+                    ? visibilityOnIcon
+                    : visibilityOffIcon
+              }
               alt=""
               width="20"
               height="20"

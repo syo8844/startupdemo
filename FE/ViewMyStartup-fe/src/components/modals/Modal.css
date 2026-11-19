@@ -212,6 +212,56 @@
   border: 0;
 }
 
+/* 기업 투자 모달 시안 */
+.investment-modal {
+  width: 496px;
+  min-height: 858px;
+  box-sizing: border-box;
+}
+
+.investment-modal-overlay {
+  padding: 0;
+}
+
+.investment-modal .invest-info {
+  padding: 16px 0 8px;
+}
+
+.investment-company-info {
+  gap: 8px;
+}
+
+.investment-company-info .company-name {
+  padding: 0;
+  font-size: 18px;
+}
+
+.investment-company-info .company-category {
+  font-size: 14px;
+}
+
+.investment-modal .investment-field {
+  width: 100%;
+}
+
+.investment-modal .investment-field + .investment-field {
+  margin-top: 24px;
+}
+
+.investment-modal .investment-control {
+  width: 100%;
+}
+
+.investment-modal .modal-footer {
+  padding-top: 24px;
+}
+
+.investment-modal .input-error {
+  color: #ff6666;
+  font-size: 13px;
+  margin: 8px 0 0;
+}
+
 .one-btn-popup {
   padding: 24px;
   width: 496px;
@@ -233,5 +283,20 @@
   .modal-footer {
     padding-left: 0px;
     padding-right: 0px;
+  }
+
+  .modal-content-box.investment-modal {
+    width: min(496px, calc(100vw - 32px));
+    min-height: min(858px, calc(100dvh - 32px));
+    max-width: none;
+  }
+
+  .investment-modal .investment-field + .investment-field {
+    margin-top: 16px;
+  }
+
+  .investment-modal .modal-footer {
+    padding-left: 27.5px;
+    padding-right: 27.5px;
   }
 }

@@ -214,6 +214,11 @@ router.patch(
   asyncHandler(investmentController.updateInvestmentComment)
 );
 
+router.post(
+  "/corp/comments/:id/verify-password",
+  asyncHandler(investmentController.verifyInvestmentPassword)
+);
+
 /**
  * @openapi
  * /corp/{id}/comments:

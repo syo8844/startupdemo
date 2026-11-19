@@ -15,3 +15,9 @@ export const postMyCorp = (id, payload) =>
  */
 export const patchMyCorp = (id, payload) =>
   instance.patch(`/corp/${id}/comments`, payload);
+
+export const verifyInvestmentPassword = (id, password) =>
+  instance.post(`/corp/comments/${id}/verify-password`, { password });
+
+export const deleteInvestmentComment = (id, password) =>
+  instance.delete(`/corp/${id}/comments`, { params: { password } });

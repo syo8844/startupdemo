@@ -6,6 +6,7 @@ import OneButtonPopup from '@/components/modals/OneButtonPopup';
 import './CompanyDetailPage.css';
 import { getCompanyDetail } from '../../api/companyDetail';
 import InvestmentModal from '@/components/modals/InvestmentModal';
+import { deleteInvestmentComment, verifyInvestmentPassword } from '@/api/invest';
 
 function formatEokWon(n) {
   if (typeof n !== 'number' || Number.isNaN(n)) return '-';
@@ -26,9 +27,11 @@ export default function CompanyDetailPage() {
   const [investments, setInvestments] = React.useState([]);
   const [page, setPage] = React.useState(1);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [editTargetRow, setEditTargetRow] = React.useState(null);
   const [openMenuRowId, setOpenMenuRowId] = React.useState(null);
   const [pwdModalOpen, setPwdModalOpen] = React.useState(false);
   const [pwdTargetRow, setPwdTargetRow] = React.useState(null);
+  const [pwdAction, setPwdAction] = React.useState('delete');
   const [pwdSubmitting, setPwdSubmitting] = React.useState(false);
   const [pwdError, setPwdError] = React.useState('');
   const [onePopup, setOnePopup] = React.useState({
@@ -71,16 +74,34 @@ export default function CompanyDetailPage() {
   };
 
   const handleEdit = (row) => {
-    setIsModalOpen(true);
-    // setInitialData(row);
+    setPwdTargetRow(row);
+    setPwdAction('edit');
+    setPwdError('');
+    setPwdModalOpen(true);
+    setOpenMenuRowId(null);
   };
 
   const handleOpenCreateInvestment = () => {
+    setEditTargetRow(null);
     setIsModalOpen(true);
+  };
+
+  const refreshCompanyDetail = async () => {
+    if (!id) return;
+    try {
+      const result = await getCompanyDetail({ id });
+      setCompany(result.company);
+      setInvestments(result.investments);
+      setPage(1);
+      setError('');
+    } catch {
+      setError('fetch-failed');
+    }
   };
 
   const handleDelete = (row) => {
     setPwdTargetRow(row);
+    setPwdAction('delete');
     setPwdError('');
     setPwdModalOpen(true);
     setOpenMenuRowId(null);
@@ -253,27 +274,37 @@ export default function CompanyDetailPage() {
             if (pwdSubmitting) return;
             setPwdModalOpen(false);
             setPwdError('');
+            setPwdTargetRow(null);
           }}
-          title="삭제 권한 인증"
-          submitLabel={pwdSubmitting ? '삭제 중...' : '삭제하기'}
-          placeholder="패스워드를 입력해주세요"
+          title={pwdAction === 'edit' ? '수정 권한 인증' : '삭제 권한 인증'}
+          submitLabel={pwdSubmitting ? '확인 중...' : pwdAction === 'edit' ? '확인하기' : '삭제하기'}
+          placeholder="비밀번호를 입력해주세요"
           isSubmitting={pwdSubmitting}
           errorMessage={pwdError}
-          onSubmit={async () => {
+          onSubmit={async (password) => {
             if (pwdSubmitting || !pwdTargetRow) return;
             try {
               setPwdSubmitting(true);
               setPwdError('');
-              setInvestments((prev) => {
-                const next = prev.filter((v) => v.id !== pwdTargetRow.id);
-                const nextTotalPages = Math.max(1, Math.ceil(next.length / pageSize));
-                if (page > nextTotalPages) setPage(nextTotalPages);
-                return next;
-              });
-              setPwdModalOpen(false);
-              showPopup('삭제가 완료되었습니다.', { buttonLabel: '확인' });
-            } catch {
-              setPwdError('비밀번호가 일치하지 않습니다.');
+              if (pwdAction === 'edit') {
+                await verifyInvestmentPassword(pwdTargetRow.id, password);
+                setEditTargetRow({ ...pwdTargetRow, password });
+                setPwdModalOpen(false);
+                setPwdTargetRow(null);
+                setIsModalOpen(true);
+              } else {
+                await deleteInvestmentComment(pwdTargetRow.id, password);
+                await refreshCompanyDetail();
+                setPwdModalOpen(false);
+                showPopup('삭제가 완료되었습니다.', { buttonLabel: '확인' });
+              }
+            } catch (error) {
+              setPwdError(
+                error.response?.status === 403
+                  ? '비밀번호가 일치하지 않습니다.'
+                  : error.response?.data?.message ||
+                    `${pwdAction === 'edit' ? '수정 권한 확인' : '삭제'}에 실패했습니다. 다시 시도해주세요.`
+              );
             } finally {
               setPwdSubmitting(false);
             }
@@ -295,7 +326,12 @@ export default function CompanyDetailPage() {
       <InvestmentModal
         isOpen={isModalOpen}
         company={company}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => {
+          setIsModalOpen(false);
+          setEditTargetRow(null);
+        }}
+        onSuccess={refreshCompanyDetail}
+        initialData={editTargetRow}
       />
     </div>
   );

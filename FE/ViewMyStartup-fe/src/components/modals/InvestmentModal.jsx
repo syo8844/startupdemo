@@ -9,7 +9,7 @@ import { postInvestCorp } from "@/api/compare";
 const MIN_INVESTMENT_AMOUNT = 50_000_000;
 const MAX_INVESTMENT_AMOUNT = 1_000_000_000;
 
-function InvestmentModal({ isOpen, company, onClose, initialData }) {
+function InvestmentModal({ isOpen, company, onClose, onSuccess, initialData }) {
   const navigate = useNavigate();
   const isEditMode = !!initialData; // 수정 모달이니?
 
@@ -18,15 +18,19 @@ function InvestmentModal({ isOpen, company, onClose, initialData }) {
   const [comment, setComment] = useState(initialData?.comment || "");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [submitError, setSubmitError] = useState("");
 
   // initialData가 변경되면 상태를 다시 초기화합니다. // FIXME: 이거 굳이 필요?
   useEffect(() => {
-    if (initialData) {
-      setInvestor(initialData?.investor || "");
-      setAmount(initialData?.amount || "");
-      setComment(initialData?.comment || "");
-    }
-  }, [initialData]);
+    if (!isOpen) return;
+
+    setInvestor(initialData?.investor || "");
+    setAmount(initialData?.amount || "");
+    setComment(initialData?.comment || "");
+    setPassword(initialData?.password || "");
+    setPasswordConfirm("");
+    setSubmitError("");
+  }, [isOpen, initialData]);
 
   // 비밀번호 일치 여부 확인
   const isPasswordMatching = password === passwordConfirm;
@@ -42,8 +46,7 @@ function InvestmentModal({ isOpen, company, onClose, initialData }) {
     Number(amount) >= MIN_INVESTMENT_AMOUNT &&
     Number(amount) <= MAX_INVESTMENT_AMOUNT &&
     password.trim() !== "" &&
-    passwordConfirm.trim() !== "" &&
-    isPasswordMatching;
+    (isEditMode || (passwordConfirm.trim() !== "" && isPasswordMatching));
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -55,12 +58,13 @@ function InvestmentModal({ isOpen, company, onClose, initialData }) {
     const payload = {
       name: investor, // 'investor'를 'name'으로 변경
       amount: Number(amount),
-      comment,
-      password,
-      passwordConfirm, // passwordConfirm 필드 추가
+      amount_comment: comment,
+      password: isEditMode ? initialData.password : password,
+      ...(!isEditMode ? { passwordConfirm } : {}),
     };
 
     try {
+      setSubmitError("");
       if (isEditMode) {
         await patchMyCorp(initialData.id, payload); // 수정 API 호출
       } else {
@@ -70,7 +74,11 @@ function InvestmentModal({ isOpen, company, onClose, initialData }) {
       setIsModalOpen(true); // 성공 시에만 팝업을 띄웁니다.
     } catch (error) {
       console.error(`투자 ${isEditMode ? "수정" : "하기"} 실패:`, error);
-      // 필요하다면 여기에 에러 팝업을 띄우는 로직을 추가할 수 있습니다.
+      setSubmitError(
+        error.response?.status === 403
+          ? "비밀번호가 일치하지 않습니다. 다시 확인해주세요."
+          : error.response?.data?.message || "요청을 처리하지 못했습니다. 다시 시도해주세요."
+      );
     }
   };
 
@@ -80,6 +88,7 @@ function InvestmentModal({ isOpen, company, onClose, initialData }) {
         isOpen={isOpen}
         onClose={onClose}
         title="기업에 투자하기"
+        className="investment-modal"
         footer={{
           cancelText: "취소",
           confirmText: isEditMode ? "수정하기" : "투자하기",
@@ -89,7 +98,7 @@ function InvestmentModal({ isOpen, company, onClose, initialData }) {
       >
         <div className="invest-info">
           <div className="invest-label">투자 기업 정보</div>
-          <div className="company-info">
+          <div className="company-info investment-company-info">
             <div
               className="company-logo"
               role="img"
@@ -107,42 +116,68 @@ function InvestmentModal({ isOpen, company, onClose, initialData }) {
           </div>
         </div>
         <LabelInput
+          className="investment-field"
+          controlClassName="investment-control"
           label="투자자 이름"
           value={investor}
           onChange={setInvestor}
+          placeholder="투자자 이름을 입력해 주세요"
           required
         />
         <LabelInput
-          label="투자 금액 (원, 최소 0.5억 원 · 최대 10억 원)"
+          className="investment-field"
+          controlClassName="investment-control"
+          label="투자 금액"
           type="number"
           value={amount}
           onChange={setAmount}
+          placeholder="투자 금액을 입력해 주세요"
           min={MIN_INVESTMENT_AMOUNT}
           max={MAX_INVESTMENT_AMOUNT}
           step={1}
           required
         />
         <LabelInput
+          className="investment-field"
+          controlClassName="investment-control"
           label="투자 코멘트"
           value={comment}
           onChange={setComment}
+          placeholder="투자에 대한 코멘트를 입력해 주세요"
           multiline
         />
-        <LabelInput
-          label="비밀번호"
-          type="password"
-          value={password}
-          onChange={setPassword}
-          required
-        />
-        <LabelInput
-          label="비밀번호 확인"
-          type="password"
-          value={passwordConfirm}
-          onChange={setPasswordConfirm}
-          error={passwordError}
-          required
-        />
+        {!isEditMode && (
+          <LabelInput
+            className="investment-field"
+            controlClassName="investment-control"
+            defaultEyeIconVisible
+            label="비밀번호"
+            type="password"
+            value={password}
+            onChange={setPassword}
+            placeholder="비밀번호를 입력해주세요"
+            required
+          />
+        )}
+        {!isEditMode && (
+          <LabelInput
+            className="investment-field"
+            controlClassName="investment-control"
+            defaultEyeIconVisible
+            label="비밀번호 확인"
+            type="password"
+            value={passwordConfirm}
+            onChange={setPasswordConfirm}
+            placeholder="비밀번호를 다시 한 번 입력해주세요"
+            error={passwordError}
+            required
+          />
+        )}
+        {submitError && (
+          <p className="input-error" role="alert">
+            {submitError}
+          </p>
+        )}
       </Modal>
       {isModalOpen && (
         <OneButtonPopup
@@ -152,7 +187,8 @@ function InvestmentModal({ isOpen, company, onClose, initialData }) {
           onButtonClick={() => {
             setIsModalOpen(false);
             onClose();
-            navigate('/investment');
+            if (onSuccess) onSuccess();
+            else navigate('/investment');
           }}
         />
       )}
