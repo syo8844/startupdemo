@@ -143,30 +143,27 @@ export default function ComparePage() {
   return (
     <div className="compare-page">
       <CardContainer
-        title={'내가 선택한 기업'}
-        btnName={myCompany ? '다른 기업 비교하기' : ''}
+        title="나의 기업을 선택해 주세요!"
         selectedCompany={myCompany}
         onSelectCompany={handleSelectMyCompany}
         onRemove={handleRemoveMyCompany}
-        onSelectCompare={handleConfirmCompare}
-        companyList={compareCompanies}
-        myCompanyId={myCompany?.id}
         isMyCompanyCard
       />
 
+      {showCompareButton && myCompany && (
+        <CardContainer
+          title="어떤 기업이 궁금하세요?"
+          btnName="기업 추가하기"
+          onSelectCompare={handleConfirmCompare}
+          onRemove={handleRemoveCompareCompany}
+          companyList={compareCompanies}
+          myCompanyId={myCompany.id}
+          isCompareAddDisabled={compareCompanies.length >= 5}
+        />
+      )}
+
       {showCompareButton && (
         <>
-          <CardContainer
-            title="어떤 기업이 궁금하세요?"
-            desc="(최대 5개)"
-            btnName="기업 추가하기"
-            onSelectCompare={handleConfirmCompare}
-            onRemove={handleRemoveCompareCompany}
-            companyList={compareCompanies}
-            myCompanyId={myCompany?.id}
-            isCompareAddDisabled={compareCompanies.length >= 5}
-          />
-
           <div className="btn-center">
             <LargeButton
               onClick={handleCompareClick}
