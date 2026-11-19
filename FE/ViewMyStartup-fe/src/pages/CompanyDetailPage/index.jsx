@@ -299,6 +299,14 @@ export default function CompanyDetailPage() {
                 showPopup('삭제가 완료되었습니다.', { buttonLabel: '확인' });
               }
             } catch (error) {
+              if (pwdAction === 'delete' && error.response?.status === 403) {
+                setPwdModalOpen(false);
+                setPwdTargetRow(null);
+                setPwdError('');
+                showPopup('잘못된 비밀번호로 삭제에 실패하였습니다.');
+                return;
+              }
+
               setPwdError(
                 error.response?.status === 403
                   ? '비밀번호가 일치하지 않습니다.'

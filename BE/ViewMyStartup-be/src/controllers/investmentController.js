@@ -56,13 +56,22 @@ const investmentController = {
   //투자자 코멘트 글 수정
   updateInvestmentComment: async (req, res) => {
     const { id } = req.params;
-    const { name, amount, amount_comment, password } = req.body;
+    const {
+      name,
+      amount,
+      amount_comment,
+      password,
+      newPassword,
+      newPasswordConfirm,
+    } = req.body;
     const updatedInvestmentComment =
       await investmentService.updateInvestmentComment(id, {
         name,
         amount,
         amount_comment,
         password,
+        newPassword,
+        newPasswordConfirm,
       });
     res.send({
       message: "Updated successfully",

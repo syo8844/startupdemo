@@ -169,9 +169,32 @@ const investmentService = {
   /* 투자자 코멘트 글 수정 */
   updateInvestmentComment: async (
     id,
-    { name, amount, amount_comment, password }
+    {
+      name,
+      amount,
+      amount_comment,
+      password,
+      newPassword,
+      newPasswordConfirm,
+    }
   ) => {
     validateInvestmentAmount(amount);
+    const hasNewPassword =
+      typeof newPassword === "string" && newPassword.trim() !== "";
+    const hasNewPasswordConfirm =
+      typeof newPasswordConfirm === "string" &&
+      newPasswordConfirm.trim() !== "";
+
+    if (hasNewPassword && !hasNewPasswordConfirm) {
+      throw new Error("Password confirmation is required");
+    }
+    if (!hasNewPassword && hasNewPasswordConfirm) {
+      throw new Error("New password is required");
+    }
+    if (hasNewPassword && newPassword !== newPasswordConfirm) {
+      throw new Error("New passwords do not match");
+    }
+
     const investmentComment = await prisma.investment.findUnique({
       where: { id },
       select: {
@@ -188,9 +211,14 @@ const investmentService = {
       throw new Error("Password is not valid");
     }
 
+    const data = { name, amount, amount_comment };
+    if (hasNewPassword) {
+      data.password = await bcrypt.hash(newPassword, 10);
+    }
+
     return prisma.investment.update({
       where: { id },
-      data: { name, amount, amount_comment },
+      data,
     });
   },
 

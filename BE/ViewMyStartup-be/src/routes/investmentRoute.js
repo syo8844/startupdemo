@@ -176,12 +176,6 @@ router.post(
  *         schema:
  *           type: string
  *         description: 투자 ID
- *       - in: query
- *         name: password
- *         required: true
- *         schema:
- *           type: string
- *         description: 댓글 수정용 비밀번호
  *     requestBody:
  *       required: true
  *       content:
@@ -189,13 +183,26 @@ router.post(
  *           schema:
  *             type: object
  *             required:
+ *               - name
+ *               - amount
  *               - amount_comment
  *               - password
  *             properties:
- *               comment:
+ *               name:
+ *                 type: string
+ *               amount:
+ *                 type: integer
+ *               amount_comment:
  *                 type: string
  *               password:
  *                 type: string
+ *                 description: 현재 비밀번호(수정 권한 확인용)
+ *               newPassword:
+ *                 type: string
+ *                 description: 변경할 비밀번호(선택)
+ *               newPasswordConfirm:
+ *                 type: string
+ *                 description: 변경할 비밀번호 확인(선택)
  *     responses:
  *       '200':
  *         description: 댓글 수정 성공

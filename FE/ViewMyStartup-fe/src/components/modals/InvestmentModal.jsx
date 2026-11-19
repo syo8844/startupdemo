@@ -27,7 +27,7 @@ function InvestmentModal({ isOpen, company, onClose, onSuccess, initialData }) {
     setInvestor(initialData?.investor || "");
     setAmount(String(initialData?.amount ?? ""));
     setComment(initialData?.comment || "");
-    setPassword(initialData?.password || "");
+    setPassword("");
     setPasswordConfirm("");
     setSubmitError("");
   }, [isOpen, initialData]);
@@ -35,21 +35,30 @@ function InvestmentModal({ isOpen, company, onClose, onSuccess, initialData }) {
   // 비밀번호 일치 여부 확인
   const isPasswordMatching = password === passwordConfirm;
   const passwordError =
-    passwordConfirm && !isPasswordMatching
-      ? "비밀번호가 일치하지 않습니다."
-      : "";
+    !password.trim() && passwordConfirm.trim()
+      ? "비밀번호를 먼저 입력해주세요."
+      : password.trim() && !passwordConfirm.trim()
+        ? "비밀번호 확인을 입력해주세요."
+        : password.trim() && !isPasswordMatching
+          ? "비밀번호가 일치하지 않습니다."
+          : "";
 
   // 모든 필수 필드가 채워졌는지 확인
   const normalizedAmount = String(amount ?? "").trim();
   const amountValue = Number(normalizedAmount);
+  const hasPassword = password.trim() !== "";
+  const hasPasswordConfirm = passwordConfirm.trim() !== "";
+  const isPasswordValid = isEditMode
+    ? (!hasPassword && !hasPasswordConfirm) ||
+      (hasPassword && hasPasswordConfirm && isPasswordMatching)
+    : hasPassword && hasPasswordConfirm && isPasswordMatching;
   const isFormValid =
     investor.trim() !== "" &&
     normalizedAmount !== "" &&
     Number.isFinite(amountValue) &&
     amountValue >= MIN_INVESTMENT_AMOUNT &&
     amountValue <= MAX_INVESTMENT_AMOUNT &&
-    password.trim() !== "" &&
-    (isEditMode || (passwordConfirm.trim() !== "" && isPasswordMatching));
+    isPasswordValid;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -63,7 +72,11 @@ function InvestmentModal({ isOpen, company, onClose, onSuccess, initialData }) {
       amount: amountValue,
       amount_comment: comment,
       password: isEditMode ? initialData.password : password,
-      ...(!isEditMode ? { passwordConfirm } : {}),
+      ...(isEditMode
+        ? hasPassword
+          ? { newPassword: password, newPasswordConfirm: passwordConfirm }
+          : {}
+        : { passwordConfirm }),
     };
 
     try {
@@ -149,33 +162,29 @@ function InvestmentModal({ isOpen, company, onClose, onSuccess, initialData }) {
           placeholder="투자에 대한 코멘트를 입력해 주세요"
           multiline
         />
-        {!isEditMode && (
-          <LabelInput
-            className="investment-field"
-            controlClassName="investment-control"
-            defaultEyeIconVisible
-            label="비밀번호"
-            type="password"
-            value={password}
-            onChange={setPassword}
-            placeholder="비밀번호를 입력해주세요"
-            required
-          />
-        )}
-        {!isEditMode && (
-          <LabelInput
-            className="investment-field"
-            controlClassName="investment-control"
-            defaultEyeIconVisible
-            label="비밀번호 확인"
-            type="password"
-            value={passwordConfirm}
-            onChange={setPasswordConfirm}
-            placeholder="비밀번호를 다시 한 번 입력해주세요"
-            error={passwordError}
-            required
-          />
-        )}
+        <LabelInput
+          className="investment-field"
+          controlClassName="investment-control"
+          defaultEyeIconVisible
+          label={isEditMode ? "새 비밀번호" : "비밀번호"}
+          type="password"
+          value={password}
+          onChange={setPassword}
+          placeholder={isEditMode ? "변경할 비밀번호를 입력해주세요" : "비밀번호를 입력해주세요"}
+          required={!isEditMode}
+        />
+        <LabelInput
+          className="investment-field"
+          controlClassName="investment-control"
+          defaultEyeIconVisible
+          label={isEditMode ? "새 비밀번호 확인" : "비밀번호 확인"}
+          type="password"
+          value={passwordConfirm}
+          onChange={setPasswordConfirm}
+          placeholder="비밀번호를 다시 한 번 입력해주세요"
+          error={passwordError}
+          required={!isEditMode}
+        />
         {submitError && (
           <p className="input-error" role="alert">
             {submitError}

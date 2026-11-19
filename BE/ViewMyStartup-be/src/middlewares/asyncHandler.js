@@ -7,7 +7,10 @@ function asyncHandler(handler) {
     } catch (e) {
       if (
         e.name === "StructError" ||
-        e instanceof Prisma.PrismaClientValidationError
+        e instanceof Prisma.PrismaClientValidationError ||
+        e.message === "Password confirmation is required" ||
+        e.message === "New password is required" ||
+        e.message === "New passwords do not match"
       ) {
         res.status(400).send({ message: e.message });
       } else if (
