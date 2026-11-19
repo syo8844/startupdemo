@@ -13,6 +13,7 @@ import {
 import Loading from '../Loading';
 
 const LIMIT = 5;
+export const MAX_COMPARE_COMPANIES = 4;
 
 export default function CompareCompanyModal({
   isOpen,
@@ -53,21 +54,23 @@ export default function CompareCompanyModal({
       // 현재 company.id와 다른 id를 가진 기업들만 남김
       const newList = selectedList.filter((item) => item.id !== company.id);
       setSelectedList(newList);
-      // 5개 미만이 되면 에러 메시지 초기화
-      if (newList.length < 5) {
+      // 최대 선택 수보다 적어지면 에러 메시지 초기화
+      if (newList.length < MAX_COMPARE_COMPANIES) {
         setSelectionError('');
       }
     } else {
       // 새로 선택하는 경우
-      if (selectedList.length < 5) {
+      if (selectedList.length < MAX_COMPARE_COMPANIES) {
         const newList = [...selectedList, company];
         setSelectedList(newList);
-        // 5번째 기업을 추가한 직후, newList의 길이를 기준으로 에러 메시지를 설정합니다.
-        if (newList.length === 5) {
-          setSelectionError('*비교할 기업은 최대 5개까지 선택 가능합니다.');
+        // 내 기업을 포함해 결과가 최대 5개가 되도록 비교 기업은 4개까지 허용합니다.
+        if (newList.length === MAX_COMPARE_COMPANIES) {
+          setSelectionError(
+            '*나의 기업을 포함해 최대 5개까지 비교할 수 있습니다.',
+          );
         }
       } else {
-        // 이미 5개가 꽉 찼을 때 6번째를 누르면 아무 동작도 하지 않거나,
+        // 최대 선택 수에 도달하면 추가 선택을 막습니다.
         // 이미 표시된 에러 메시지를 유지합니다.
       }
     }
@@ -75,8 +78,8 @@ export default function CompareCompanyModal({
 
   // 기업 해제 함수: id 제거
   const unselectItem = (id) => {
-    // 기업을 해제하여 5개 미만이 되면 에러 메시지를 초기화
-    if (selectedList.length - 1 < 5) setSelectionError('');
+    // 기업을 해제하여 최대 선택 수보다 적어지면 에러 메시지를 초기화
+    if (selectedList.length - 1 < MAX_COMPARE_COMPANIES) setSelectionError('');
     // 기업 정보 list에서도 제거합니다.
     setSelectedList((prev) => prev.filter((item) => item.id !== id));
   };
@@ -190,9 +193,10 @@ export default function CompareCompanyModal({
               const isSelected = selectedList.some(
                 (item) => item.id === company.id,
               );
-              // 선택된 기업의 수가 최대치(5개)에 도달했는지 확인하는 변수(boolean)입니다.
+              // 비교 기업 최대치(4개)에 도달했는지 확인합니다.
               // 아직 선택되지 않은 다른 항목 선택 비활성
-              const isLimitReached = selectedList.length >= 5;
+              const isLimitReached =
+                selectedList.length >= MAX_COMPARE_COMPANIES;
               return (
                 <CompanySelectRow
                   key={company.id}
@@ -206,7 +210,7 @@ export default function CompareCompanyModal({
                   status={isSelected ? 'done' : 'pick'}
                   // 기업 선택/해제 토글 함수 연결
                   onClick={() => toggleItem(company)}
-                  // 5개 꽉 찼는데 아직 선택 안 된 항목만 비활성화
+                  // 최대치에 도달했으면 미선택 기업만 비활성화
                   disabled={!isSelected && isLimitReached}
                 />
               );

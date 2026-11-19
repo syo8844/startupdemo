@@ -539,14 +539,33 @@ export async function getOrderCompare({ offset, limit, order }) {
       orderBy = { total_investment: "desc" };
   }
 
-  const corpId = await getMyCompareAndMyCompare();
-  if (!corpId.length) return [];
+  const [myCompany, compareCompanies] = await Promise.all([
+    prisma.my_compare_corp.findFirst({
+      where: {
+        userId: DEFAULT_USER_ID,
+        isDeleted: false,
+      },
+      orderBy: { updated_at: "desc" },
+      select: { corpId: true },
+    }),
+    prisma.compare_corp.findMany({
+      where: {
+        userId: DEFAULT_USER_ID,
+        isDeleted: false,
+      },
+      select: { corpId: true },
+    }),
+  ]);
+  const myCompanyId = myCompany?.corpId;
+  const comparisonIds = compareCompanies
+    .map((company) => company.corpId)
+    .filter((id) => id && id !== myCompanyId);
+  const corpIds = [...new Set([myCompanyId, ...comparisonIds].filter(Boolean))];
+  if (!corpIds.length) return [];
 
-  const compareCorps = await prisma.corp.findMany({
-    where: { id: { in: corpId } },
+  const selectedCorps = await prisma.corp.findMany({
+    where: { id: { in: corpIds } },
     orderBy: [orderBy, { created_at: "desc" }],
-    skip: parseInt(offset),
-    take: parseInt(limit),
     select: {
       id: true,
       corp_name: true,
@@ -559,7 +578,24 @@ export async function getOrderCompare({ offset, limit, order }) {
     },
   });
 
-  return compareCorps;
+  const visibleComparisonIds = new Set(
+    selectedCorps
+      .filter((corp) => corp.id !== myCompanyId)
+      .slice(0, myCompanyId ? 4 : 5)
+      .map((corp) => corp.id),
+  );
+  if (myCompanyId) visibleComparisonIds.add(myCompanyId);
+
+  const visibleCorps = selectedCorps.filter((corp) =>
+    visibleComparisonIds.has(corp.id),
+  );
+  const start = Math.max(Number.parseInt(offset, 10) || 0, 0);
+  const requestedLimit = Number.parseInt(limit, 10);
+  const pageSize = Number.isNaN(requestedLimit)
+    ? 5
+    : Math.max(requestedLimit, 0);
+
+  return visibleCorps.slice(start, start + pageSize);
 }
 
 export async function getTotalCompare({ offset, limit, order }) {

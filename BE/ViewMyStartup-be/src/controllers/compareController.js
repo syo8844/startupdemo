@@ -118,14 +118,14 @@ export async function getRankingCompareController(req, res) {
 }
 
 export async function getOrderCompareController(req, res) {
-  const { offset = 0, limit = 6, order = "investment_desc" } = req.query;
+  const { offset = 0, limit = 5, order = "investment_desc" } = req.query;
   const data = { offset, limit, order };
   const compare = await getOrderCompare(data);
   res.send(compare);
 }
 
 export async function getTotalCompareController(req, res) {
-  const { offset = 0, limit = 6, order = "investment_desc" } = req.query;
+  const { offset = 0, limit = 5, order = "investment_desc" } = req.query;
   const data = { offset, limit, order };
   const compare = await getTotalCompare(data);
   res.send(compare);

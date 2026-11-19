@@ -5,6 +5,7 @@ import './ComparePage.css';
 import Pagination from '@/components/Pagination';
 import Dropdown from '@/components/Dropdown';
 import InvestmentModal from '@/components/modals/InvestmentModal';
+import { MAX_COMPARE_COMPANIES } from '@/components/modals/CompareCompanyModal';
 import {
   getCompareList,
   getRankList,
@@ -188,7 +189,9 @@ export default function ComparePage() {
           onRemove={handleRemoveCompareCompany}
           companyList={compareCompanies}
           myCompanyId={myCompany.id}
-          isCompareAddDisabled={compareCompanies.length >= 5}
+          isCompareAddDisabled={
+            compareCompanies.length >= MAX_COMPARE_COMPANIES
+          }
         />
       )}
 
