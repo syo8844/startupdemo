@@ -327,8 +327,8 @@ router.get("/comparerank", asyncHandler(getRankingCompareController));
  * @openapi
  * /compare/compareorder:
  *   get:
- *     summary: 비교 결과 최대 5개 기업 조회
- *     description: 내 기업을 포함해 최대 5개 기업을 정렬 기준에 따라 반환합니다.
+ *     summary: 비교 대상 기업 최대 5개 조회
+ *     description: 내 기업을 제외하고 비교 대상으로 선택한 기업을 최대 5개 반환합니다.
  *     tags:
  *       - Compare
  *     parameters:
@@ -356,7 +356,7 @@ router.get("/comparerank", asyncHandler(getRankingCompareController));
  *           정렬 기준. 컨트롤러 기본값은 "investment_desc"이며, 서비스에서 기본 분기(투자액 내림차순)로 처리됩니다.
  *     responses:
  *       '200':
- *         description: 내 기업을 포함한 최대 5개 기업 배열 (랭킹 없음)
+ *         description: 내 기업을 제외한 최대 5개 비교 기업 배열 (랭킹 없음)
  *       '500':
  *         description: 서버 오류
  */

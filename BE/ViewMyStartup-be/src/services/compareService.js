@@ -581,10 +581,9 @@ export async function getOrderCompare({ offset, limit, order }) {
   const visibleComparisonIds = new Set(
     selectedCorps
       .filter((corp) => corp.id !== myCompanyId)
-      .slice(0, myCompanyId ? 4 : 5)
+      .slice(0, 5)
       .map((corp) => corp.id),
   );
-  if (myCompanyId) visibleComparisonIds.add(myCompanyId);
 
   const visibleCorps = selectedCorps.filter((corp) =>
     visibleComparisonIds.has(corp.id),
