@@ -13,7 +13,7 @@ import {
 import Loading from '../Loading';
 
 const LIMIT = 5;
-export const MAX_COMPARE_COMPANIES = 4;
+export const MAX_COMPARE_COMPANIES = 5;
 
 export default function CompareCompanyModal({
   isOpen,
@@ -63,11 +63,9 @@ export default function CompareCompanyModal({
       if (selectedList.length < MAX_COMPARE_COMPANIES) {
         const newList = [...selectedList, company];
         setSelectedList(newList);
-        // 내 기업을 포함해 결과가 최대 5개가 되도록 비교 기업은 4개까지 허용합니다.
+        // 비교 기업을 최대 5개까지 선택할 수 있습니다.
         if (newList.length === MAX_COMPARE_COMPANIES) {
-          setSelectionError(
-            '*나의 기업을 포함해 최대 5개까지 비교할 수 있습니다.',
-          );
+          setSelectionError('*비교할 기업은 최대 5개까지 선택 가능합니다.');
         }
       } else {
         // 최대 선택 수에 도달하면 추가 선택을 막습니다.
@@ -193,7 +191,7 @@ export default function CompareCompanyModal({
               const isSelected = selectedList.some(
                 (item) => item.id === company.id,
               );
-              // 비교 기업 최대치(4개)에 도달했는지 확인합니다.
+              // 비교 기업 최대치(5개)에 도달했는지 확인합니다.
               // 아직 선택되지 않은 다른 항목 선택 비활성
               const isLimitReached =
                 selectedList.length >= MAX_COMPARE_COMPANIES;
